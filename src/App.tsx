@@ -1,26 +1,23 @@
 import 'dotenv/config';
 
 import React from 'react';
-import { Router } from 'react-router-dom';
-// import { PersistGate } from 'redux-persist/integration/react';
-// import { Provider } from 'react-redux';
+import { BrowserRouter } from 'react-router-dom';
 
-import history from './services/history';
+import { AuthProvider } from './context/AuthContext';
 import GlobalStyle from './styles/global';
 
-// import { store, persistor } from './store';
 import Routes from './routes';
 
 const App: React.FC = () => {
   return (
-    // <Provider store={store}>
-    // <PersistGate persistor={persistor}>
-    <Router history={history}>
-      <Routes />
+    <>
+      <AuthProvider>
+        <BrowserRouter>
+          <Routes />
+        </BrowserRouter>
+      </AuthProvider>
       <GlobalStyle />
-    </Router>
-    // </PersistGate>
-    // </Provider>
+    </>
   );
 };
 
