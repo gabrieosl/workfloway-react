@@ -1,10 +1,12 @@
 import styled from 'styled-components';
 
 export const Container = styled.div`
-  height: 100%;
-  width: 100%;
-  background: #0000b3;
+  /* height: 100%;
+  width: 100%; */
+  /* background: #0000b3; */
   display: flex;
+  overflow-y: hidden;
+  flex: 1;
   overflow-y: hidden;
 `;
 
@@ -15,6 +17,8 @@ export const WorkflowArea = styled.div`
   box-shadow: 3px 3px 5px 5px rgba(0, 0, 0, 0.3);
   background: #fff;
   margin: 15px;
+  overflow-y: auto;
+  padding-right: 10px;
 `;
 
 export const ObservationTypes = styled.div`

@@ -3,10 +3,10 @@ import styled from 'styled-components';
 export const Container = styled.div`
   display: flex;
   flex-direction: column;
-  height: 100vh;
 
-  align-items: stretch;
-  background: #03126c;
+  background: #f0fff0;
+  flex: 1;
+  overflow-y: hidden;
 `;
 
 export const Main = styled.main`
@@ -18,4 +18,9 @@ export const Main = styled.main`
   margin: 15px;
   border-radius: 10px;
   box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.3), -5px -5px 5px rgba(0, 0, 0, 0.3);
+`;
+
+export const WorkflowSelector = styled.div`
+  height: 60px;
+  background: yellow;
 `;

@@ -2,10 +2,9 @@ import React, { useEffect } from 'react';
 
 import { useNavigation } from '../../context/NavigationContext';
 
-import WorkflowMaker from '../../components/WorkflowMaker';
+import WorkflowEditor from '../../components/WorkflowEditor';
 
-import { Container, Main } from './styles';
-import Selection from '../../components/Selection';
+import { Container, WorkflowSelector } from './styles';
 
 const Workflows: React.FC = () => {
   const { setPage } = useNavigation();
@@ -14,10 +13,8 @@ const Workflows: React.FC = () => {
 
   return (
     <Container>
-      <Main>
-        <WorkflowMaker />
-        <Selection />
-      </Main>
+      <WorkflowSelector />
+      <WorkflowEditor />
     </Container>
   );
 };

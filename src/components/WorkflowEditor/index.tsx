@@ -20,7 +20,7 @@ interface ObservationTypeItem {
   name: string;
 }
 
-const WorflowMaker: React.FC = () => {
+const WorflowEditor: React.FC = () => {
   const [observationTypes, setObservationTypes] = useState<
     ObservationTypeItem[]
   >([]);
@@ -72,14 +72,9 @@ const WorflowMaker: React.FC = () => {
             </button>
           </ObservationTypesWrapper>
         </ObservationTypes>
-        {/* To be moved out */}
-        {/* <Selection>
-          <span>Seleçao atual:</span>
-          <aside>4 objs.</aside>
-        </Selection> */}
       </Container>
     </DndProvider>
   );
 };
 
-export default WorflowMaker;
+export default WorflowEditor;
