@@ -1,19 +1,21 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+
+import { useNavigation } from '../../context/NavigationContext';
 
 import SubjectsViewer from '../../components/SubjectsViewer';
 
-import { Container, Main } from './styles';
-import Header from '../../components/Header';
+import { Container } from './styles';
 import Selection from '../../components/Selection';
 
 const Dashboard: React.FC = () => {
+  const { setPage } = useNavigation();
+
+  useEffect(() => setPage('dashboard'), [setPage]);
+
   return (
     <Container>
-      <Header />
-      <Main>
-        <SubjectsViewer />
-        <Selection />
-      </Main>
+      <SubjectsViewer />
+      <Selection />
     </Container>
   );
 };

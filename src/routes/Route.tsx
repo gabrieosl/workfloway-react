@@ -5,6 +5,8 @@ import {
   Redirect,
 } from 'react-router-dom';
 
+import DefaultLayout from '../pages/_layouts/Default';
+
 import { useAuth } from '../context/AuthContext';
 
 interface RouteProps extends RouterDOMRouteProps {
@@ -23,9 +25,11 @@ const CustomRoute: React.FC<RouteProps> = ({
     <ReactDOMRoute
       render={() => {
         return isPrivate === !!user ? (
-          <Component />
+          <DefaultLayout>
+            <Component />
+          </DefaultLayout>
         ) : (
-          <Redirect to={{ pathname: isPrivate ? '/' : '/dashboard' }} />
+          <Redirect to={{ pathname: isPrivate ? '/signin' : '/dashboard' }} />
         );
       }}
       {...rest}

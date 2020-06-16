@@ -4,45 +4,39 @@ export const Container = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 100px;
+  height: 50px;
 
-  nav {
-    margin-left: 70px;
-
-    a {
-      margin: 0 20px;
-      color: #fff;
-      font-weight: bold;
-      font-size: 18px;
-    }
+  > strong {
+    margin-left: 20px;
+    font-size: 24px;
   }
 
   aside {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-right: 30px;
+    margin-right: 15px;
 
     svg {
-      color: #efa00b;
+      color: #000;
     }
 
     strong {
       font-size: 18px;
       margin-left: 10px;
-      margin-right: 40px;
-      color: #efa00b;
+      margin-right: 20px;
+      color: #000;
     }
 
     button {
       border: 0;
-      background: #020a3c;
-      padding: 10px;
+      background: #000;
+      padding: 5px;
       border-radius: 6px;
       box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.3);
 
       svg {
-        color: #efa00b;
+        color: #fff;
         height: 20px;
         width: 20px;
       }
