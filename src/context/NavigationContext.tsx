@@ -1,4 +1,5 @@
 import React, { useState, createContext, useCallback, useContext } from 'react';
+import { produce } from 'immer';
 
 interface NavigationState {
   page: string;
@@ -21,10 +22,12 @@ export const NavigationProvider: React.FC = ({ children }) => {
   });
 
   const setPage = useCallback((_page: string) => {
-    setData(prev => {
-      prev.page = _page;
-      return prev;
-    });
+    setData(prev =>
+      produce(prev, draft => {
+        draft.page = _page;
+        return draft;
+      }),
+    );
   }, []);
 
   const setSubpage = useCallback((_subpage: string) => {
