@@ -14,17 +14,17 @@ import { WorkflowProvider } from '../context/WorkflowContext';
 
 const routes: React.FC = () => {
   return (
-    <WorkflowProvider>
-      <Switch>
-        <Route path="/" exact component={() => <Redirect to="/dashboard" />} />
-        <Route path="/dashboard" component={Dashboard} isPrivate />
-        <Route path="/selections" component={Selections} isPrivate />
+    <Switch>
+      <Route path="/" exact component={() => <Redirect to="/dashboard" />} />
+      <Route path="/dashboard" component={Dashboard} isPrivate />
+      <Route path="/selections" component={Selections} isPrivate />
+      <WorkflowProvider>
         <Route path="/workflows" component={Workflows} isPrivate />
-        <Route path="/activities" component={Activities} isPrivate />
-        <Route path="/signin" exact component={SignIn} />
-        <Route path="/" component={() => <h1>404</h1>} />
-      </Switch>
-    </WorkflowProvider>
+      </WorkflowProvider>
+      <Route path="/activities" component={Activities} isPrivate />
+      <Route path="/signin" exact component={SignIn} />
+      <Route path="/" component={() => <h1>404</h1>} />
+    </Switch>
   );
 };
 

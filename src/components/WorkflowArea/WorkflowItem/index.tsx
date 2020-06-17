@@ -1,8 +1,8 @@
-import React, { useMemo, useCallback } from 'react';
+import React, { useMemo } from 'react';
 import { useDrop, useDrag, DragSourceMonitor } from 'react-dnd';
-import { MdKeyboardArrowDown, MdRemoveCircle } from 'react-icons/all';
+import { MdKeyboardArrowDown, MdRemoveCircle, GrDrag } from 'react-icons/all';
 
-import { useWorkflow } from '../../../../context/WorkflowContext';
+import { useWorkflow } from '../../../context/WorkflowContext';
 import { Container } from './styles';
 
 type WorkflowItemProps = {
@@ -62,12 +62,14 @@ const WorkflowItem: React.FC<WorkflowItemProps> = ({
           <MdKeyboardArrowDown className="arrow" />
           {isActive && <section />}
           <main id={id} ref={isDraggable ? drag : null}>
-            {children}
+            {children || <GrDrag className="drag-icon" size={15} />}
             {name}
-            {isDraggable && (
+            {isDraggable ? (
               <button type="button" onClick={() => removeItem(id)}>
                 <MdRemoveCircle />
               </button>
+            ) : (
+              <div />
             )}
           </main>
         </>

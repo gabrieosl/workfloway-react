@@ -5,6 +5,9 @@ export const Container = styled.div`
   align-items: center;
   justify-content: space-between;
   height: 50px;
+  /* box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.3); */
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  z-index: 10;
 
   > strong {
     margin-left: 20px;

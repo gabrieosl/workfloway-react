@@ -13,9 +13,6 @@ export const Container = styled.div<ContainerProps>`
   align-items: center;
   justify-content: center;
 
-  margin: 0 auto;
-  max-width: 500px;
-
   opacity: ${props => (props.isDragging ? 0.4 : 1)};
 
   #start,
@@ -38,18 +35,25 @@ export const Container = styled.div<ContainerProps>`
 
   main {
     font-size: ${props => (props.isDragging ? '16px' : '26px')};
-    text-align: center;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
     width: 100%;
-    height: 30px;
-    background: #ccc;
+    height: 45px;
+    background: #eee;
     transition: margin 0.2s ease-in;
 
+    padding: 0 10px;
     margin-top: 0;
     border-radius: 5px;
 
     svg {
-      color: pink;
+      color: #b30000;
       /* display: block; */
+      &.drag-icon {
+        opacity: 0.3;
+      }
     }
     ${props =>
       props.isActive &&

@@ -1,8 +1,9 @@
 import React from 'react';
 import { useDrag, DragSourceMonitor } from 'react-dnd';
+import { GrDrag } from 'react-icons/all';
 import { uuid } from 'uuidv4';
 
-import { useWorkflow } from '../../../../context/WorkflowContext';
+import { useWorkflow } from '../../../context/WorkflowContext';
 
 import { Container } from './styles';
 
@@ -33,7 +34,8 @@ const ObservationType: React.FC<ObservationTypeProps> = ({ id, name }) => {
 
   return (
     <Container ref={drag} isDragging={isDragging} id={id}>
-      {name}
+      <GrDrag size={15} />
+      <span>{name}</span>
     </Container>
   );
 };

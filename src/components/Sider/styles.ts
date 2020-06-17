@@ -31,6 +31,10 @@ export const Container = styled.div`
       width: 25px;
     }
 
+    &.active {
+      box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+    }
+
     &.dashboard {
       &.active {
         background: #03126c;

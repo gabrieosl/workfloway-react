@@ -5,13 +5,21 @@ interface ContainerProps {
 }
 export const Container = styled.div<ContainerProps>`
   display: flex;
-  justify-content: center;
   align-items: center;
+
   font-size: 22px;
-  color: #fff;
+  color: #000;
   padding: 8px;
   margin: 5px 10px;
   border-radius: 5px;
-  background: red;
+  background: #f0fff0;
   opacity: ${props => (props.isDragging ? 0.4 : 1)};
+
+  svg {
+    opacity: 0.3;
+  }
+  span {
+    flex: 1;
+    margin-left: 6px;
+  }
 `;
