@@ -31,6 +31,7 @@ const Workflows: React.FC = () => {
 
   useEffect(() => {
     api.get('/workflows').then(response => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const workflows = response.data.map((option: { id: any; name: any }) => ({
         value: option.id,
         label: option.name,
@@ -40,6 +41,7 @@ const Workflows: React.FC = () => {
   }, []);
 
   const handleEditName = useCallback(() => {
+    // eslint-disable-next-line no-alert
     const newName = window.prompt(
       'Enter new name',
       workflow.name || 'untitled',
@@ -74,6 +76,7 @@ const Workflows: React.FC = () => {
   }, [options, setWorkflow, workflow]);
 
   const handleOptionChange = useCallback(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (newOption: any) => {
       api.get(`/workflows/${newOption.value}`).then(response => {
         setWorkflow(response.data);

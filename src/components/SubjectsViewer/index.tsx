@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 
 import api from '../../services/api';
 
-import { Container, Search, Headers, Content, Subject } from './styles';
+import { Container, Search, Headers, Subject } from './styles';
 
 interface SubjectItem {
   id: string;
@@ -12,7 +12,7 @@ interface SubjectItem {
 interface SubjectsViewerProps {
   initialData?: Array<string>;
 }
-const SubjectsViewer: React.FC<SubjectsViewerProps> = ({ initialData }) => {
+const SubjectsViewer: React.FC<SubjectsViewerProps> = () => {
   const [subjects, setSubjects] = useState<SubjectItem[]>([]);
 
   useEffect(() => {

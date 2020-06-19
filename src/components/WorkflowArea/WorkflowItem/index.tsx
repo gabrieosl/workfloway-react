@@ -36,6 +36,7 @@ const WorkflowItem: React.FC<WorkflowItemProps> = ({
     }),
   });
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [{ canDrop, isOver, item }, drop] = useDrop({
     accept: 'OBSERVATION_TYPE',
     drop: () => ({ id, typeId, name }),

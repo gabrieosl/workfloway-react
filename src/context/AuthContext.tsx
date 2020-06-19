@@ -59,7 +59,8 @@ export const AuthProvider: React.FC = ({ children }) => {
   }, []);
 
   useEffect(() => {
-    localStorage.setItem('@Workfloway:auth', JSON.stringify(data));
+    localStorage.setItem('@Workfloway:token', JSON.stringify(data.token || ''));
+    localStorage.setItem('@Workfloway:user', JSON.stringify(data.user || ''));
   }, [data]);
 
   return (

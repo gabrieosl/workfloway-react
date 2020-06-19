@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { BsPlayFill, FaStop } from 'react-icons/all';
 
 import { useWorkflow } from '../../context/WorkflowContext';
@@ -8,10 +8,6 @@ import { Container } from './styles';
 
 const WorkflowArea: React.FC = () => {
   const { workflow } = useWorkflow();
-  useEffect(() => {
-    console.log('wf changed::>');
-    console.log(workflow);
-  }, [workflow]);
 
   return (
     <Container>

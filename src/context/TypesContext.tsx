@@ -1,4 +1,10 @@
-import React, { useState, useEffect, createContext, useContext } from 'react';
+import React, {
+  useState,
+  useEffect,
+  createContext,
+  useContext,
+  useCallback,
+} from 'react';
 import api from '../services/api';
 
 interface TypesItemData {
@@ -8,6 +14,7 @@ interface TypesItemData {
 
 interface ContextData {
   types: TypesItemData[];
+  getTypeName(id: string): string | undefined;
 }
 
 const TypesContext = createContext<ContextData>({} as ContextData);
@@ -23,8 +30,18 @@ const TypesProvider: React.FC = ({ children }) => {
     });
   }, []);
 
+  const getTypeName = useCallback(
+    (id: string) => {
+      const type = types.find(_type => _type.id === id);
+      return type ? type.name : undefined;
+    },
+    [types],
+  );
+
   return (
-    <TypesContext.Provider value={{ types }}>{children}</TypesContext.Provider>
+    <TypesContext.Provider value={{ types, getTypeName }}>
+      {children}
+    </TypesContext.Provider>
   );
 };
 
