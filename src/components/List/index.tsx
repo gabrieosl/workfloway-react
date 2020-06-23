@@ -1,13 +1,11 @@
-import React, { useCallback, useState, useEffect, useMemo } from 'react';
-import { GrEdit, MdCheck, MdAdd, MdClose } from 'react-icons/all';
+import React, { useCallback, useMemo } from 'react';
+import { GrEdit, MdCheck, MdClose } from 'react-icons/all';
 import { parseISO, formatDistance } from 'date-fns';
 
-import { produce } from 'immer';
 import { useTypes } from '../../context/TypesContext';
 import { useSelection } from '../../context/SelectionContext';
 
 import { Container, Item } from './styles';
-import api from '../../services/api';
 
 interface ItemData {
   id: string;
@@ -25,49 +23,19 @@ interface ItemData {
 }
 interface ListProps {
   items: ItemData[];
-  setItems(items: ItemData[]): void;
   type?: 'show' | 'select';
 }
 
-const List: React.FC<ListProps> = ({ items, setItems, type = 'show' }) => {
+const List: React.FC<ListProps> = ({ items, type = 'show', children }) => {
   const { toogleSelection, isSelected } = useSelection();
   const { getTypeName } = useTypes();
 
-  const [currentPage, setCurrentpage] = useState(1);
-  const [size] = useState(15);
-
   const isRemovable = useMemo(() => type === 'select', [type]);
-  const handleLoadMoreItems = useCallback(() => {
-    if (currentPage > 0) {
-      api
-        .get(`/subjects?page=${currentPage + 1}&size=${size}`)
-        .then(response => {
-          if (response.data.length > 0) {
-            setItems(
-              produce(items, draft => {
-                draft.push(...response.data);
-              }),
-            );
-          }
-          if (response.data.length < size) {
-            setCurrentpage(-1);
-          }
-        });
-      setCurrentpage(currentPage + 1);
-    }
-  }, [currentPage, items, setItems, size]);
 
   const formatTime = useCallback(date => {
     return formatDistance(parseISO(date), new Date(), {
       addSuffix: true,
     });
-  }, []);
-
-  useEffect(() => {
-    api.get(`/subjects?page=${currentPage}&size=${size}`).then(response => {
-      setItems(response.data);
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -103,13 +71,7 @@ const List: React.FC<ListProps> = ({ items, setItems, type = 'show' }) => {
           </button>
         </Item>
       ))}
-      {currentPage > 0 ? (
-        <button type="button" onClick={handleLoadMoreItems}>
-          <MdAdd size={30} />
-        </button>
-      ) : (
-        <div />
-      )}
+      {children}
     </Container>
   );
 };

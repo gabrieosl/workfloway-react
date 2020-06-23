@@ -1,9 +1,10 @@
 import React, { useEffect, useState, useCallback, useMemo } from 'react';
 
-import { MdCheck, MdClose } from 'react-icons/all';
+import { MdCheck, MdClose, MdAdd } from 'react-icons/all';
 import produce from 'immer';
 import { useNavigation } from '../../context/NavigationContext';
 import { useSelection } from '../../context/SelectionContext';
+import api from '../../services/api';
 
 import List from '../../components/List';
 
@@ -32,6 +33,8 @@ const Dashboard: React.FC = () => {
   const { setPage } = useNavigation();
   const { isSelected, addToSelection, removeFromSelection } = useSelection();
 
+  const [currentPage, setCurrentpage] = useState(1);
+  const [size] = useState(15);
   const [items, setItems] = useState<ItemData[]>([]);
   const [filters, setFilters] = useState<FilterData>({
     filter1: {
@@ -76,6 +79,33 @@ const Dashboard: React.FC = () => {
     [filters],
   );
 
+  const handleLoadMoreItems = useCallback(() => {
+    if (currentPage > 0) {
+      api
+        .get(`/subjects?page=${currentPage + 1}&size=${size}`)
+        .then(response => {
+          if (response.data.length > 0) {
+            setItems(
+              produce(items, draft => {
+                draft.push(...response.data);
+              }),
+            );
+          }
+          if (response.data.length < size) {
+            setCurrentpage(-1);
+          }
+        });
+      setCurrentpage(currentPage + 1);
+    }
+  }, [currentPage, items, setItems, size]);
+
+  useEffect(() => {
+    api.get(`/subjects?page=${currentPage}&size=${size}`).then(response => {
+      setItems(response.data);
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <Container>
       <SelectionPanel isAllMarked={isAllMarked}>
@@ -102,7 +132,13 @@ const Dashboard: React.FC = () => {
           ))}
         </ActiveFilters>
       )}
-      <List items={items} setItems={setItems} />
+      <List items={items}>
+        {currentPage > 0 && (
+          <button type="button" onClick={handleLoadMoreItems}>
+            <MdAdd size={30} />
+          </button>
+        )}
+      </List>
     </Container>
   );
 };
