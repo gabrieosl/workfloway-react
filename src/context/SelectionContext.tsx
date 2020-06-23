@@ -1,26 +1,44 @@
 import React, { useState, createContext, useContext, useCallback } from 'react';
 import produce from 'immer';
 
+interface ItemData {
+  id: string;
+  name: string;
+  lastObservation?: {
+    type_id: string;
+    created_at: Date;
+    user: {
+      name: string;
+    };
+  };
+  lastSubmission?: {
+    repetition: number;
+  };
+}
+
 interface ContextData {
-  selection: string[];
-  addToSelection(id: string): void;
-  removeFromSelection(id: string): void;
-  toogleSelection(id: string): void;
+  selection: ItemData[];
+  addToSelection(item: ItemData[]): void;
+  removeFromSelection(item: ItemData[]): void;
+  toogleSelection(item: ItemData): void;
+  isSelected(id: string): boolean;
 }
 
 const SelectionContext = createContext<ContextData>({} as ContextData);
 
 const SelectionProvider: React.FC = ({ children }) => {
-  const [selection, setSelection] = useState<string[]>([]);
+  const [selection, setSelection] = useState<ItemData[]>([]);
 
   const addToSelection = useCallback(
-    (id: string): void => {
+    (newItems: ItemData[]): void => {
       setSelection(
         produce(selection, draft => {
-          const index = draft.findIndex(mk => mk === id);
-          if (index < 0) {
-            draft.push(id);
-          }
+          newItems.forEach(newItem => {
+            const index = draft.findIndex(item => item.id === newItem.id);
+            if (index < 0) {
+              draft.push(newItem);
+            }
+          });
           return draft;
         }),
       );
@@ -29,13 +47,15 @@ const SelectionProvider: React.FC = ({ children }) => {
   );
 
   const removeFromSelection = useCallback(
-    (id: string): void => {
+    (itemsToRemove: ItemData[]): void => {
       setSelection(
         produce(selection, draft => {
-          const index = draft.findIndex(mk => mk === id);
-          if (index >= 0) {
-            draft.splice(index, 1);
-          }
+          itemsToRemove.map(itemToRemove => {
+            const index = draft.findIndex(item => item.id === itemToRemove.id);
+            if (index >= 0) {
+              draft.splice(index, 1);
+            }
+          });
           return draft;
         }),
       );
@@ -44,18 +64,29 @@ const SelectionProvider: React.FC = ({ children }) => {
   );
 
   const toogleSelection = useCallback(
-    (id: string): void => {
+    (item: ItemData): void => {
       setSelection(
         produce(selection, draft => {
-          const index = draft.findIndex(mk => mk === id);
+          const index = draft.findIndex(_item => _item.id === item.id);
           if (index >= 0) {
             draft.splice(index, 1);
           } else {
-            draft.push(id);
+            draft.push(item);
           }
           return draft;
         }),
       );
+    },
+    [selection],
+  );
+
+  const isSelected = useCallback(
+    (id: string): boolean => {
+      const index = selection.findIndex(item => item.id === id);
+      if (index >= 0) {
+        return true;
+      }
+      return false;
     },
     [selection],
   );
@@ -70,6 +101,7 @@ const SelectionProvider: React.FC = ({ children }) => {
         addToSelection,
         removeFromSelection,
         toogleSelection,
+        isSelected,
       }}
     >
       {children}
