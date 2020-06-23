@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 export const Container = styled.main`
   flex: 1;
@@ -27,6 +27,7 @@ export const Container = styled.main`
 
 interface ItemProps {
   selected?: boolean;
+  isRemovable?: boolean;
 }
 
 export const Item = styled.div<ItemProps>`
@@ -102,12 +103,24 @@ export const Item = styled.div<ItemProps>`
     justify-content: center;
     height: 30px;
     width: 30px;
-    background: ${props => (props.selected ? '#FAC748' : '#ddd')};
-    color: ${props => (props.selected ? '#efa00b' : '#bbb')};
     border-radius: 50%;
     border: 0;
+
+    background: ${_props => (_props.selected ? '#FAC748' : '#ddd')};
+    color: ${_props => (_props.selected ? '#efa00b' : '#bbb')};
     &:hover {
       background: #fac748;
     }
+
+    ${props =>
+      props.isRemovable &&
+      css`
+        background: #ddd;
+        color: #b30000;
+        &:hover {
+          background: #b30000;
+          color: #ddd;
+        }
+      `};
   }
 `;

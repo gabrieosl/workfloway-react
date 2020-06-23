@@ -1,5 +1,5 @@
-import React, { useCallback, useState, useEffect } from 'react';
-import { GrEdit, MdCheck, MdAdd } from 'react-icons/all';
+import React, { useCallback, useState, useEffect, useMemo } from 'react';
+import { GrEdit, MdCheck, MdAdd, MdClose } from 'react-icons/all';
 import { parseISO, formatDistance } from 'date-fns';
 
 import { produce } from 'immer';
@@ -26,14 +26,17 @@ interface ItemData {
 interface ListProps {
   items: ItemData[];
   setItems(items: ItemData[]): void;
+  type?: 'show' | 'select';
 }
-const List: React.FC<ListProps> = ({ items, setItems }) => {
-  const { selection, toogleSelection } = useSelection();
+
+const List: React.FC<ListProps> = ({ items, setItems, type = 'show' }) => {
+  const { toogleSelection, isSelected } = useSelection();
   const { getTypeName } = useTypes();
 
   const [currentPage, setCurrentpage] = useState(1);
   const [size] = useState(15);
 
+  const isRemovable = useMemo(() => type === 'select', [type]);
   const handleLoadMoreItems = useCallback(() => {
     if (currentPage > 0) {
       api
@@ -70,7 +73,11 @@ const List: React.FC<ListProps> = ({ items, setItems }) => {
   return (
     <Container>
       {items.map(item => (
-        <Item key={item.id} selected={selection.includes(item.id)}>
+        <Item
+          key={item.id}
+          selected={isSelected(item.id)}
+          isRemovable={isRemovable}
+        >
           <strong>{item.name}</strong>
           <span>
             {item.lastObservation
@@ -91,8 +98,8 @@ const List: React.FC<ListProps> = ({ items, setItems }) => {
               </>
             )}
           </div>
-          <button type="button" onClick={() => toogleSelection(item.id)}>
-            <MdCheck size={25} />
+          <button type="button" onClick={() => toogleSelection(item)}>
+            {isRemovable ? <MdClose size={25} /> : <MdCheck size={25} />}
           </button>
         </Item>
       ))}
