@@ -43,12 +43,32 @@ export const Container = styled.div`
         background: #03126c66;
       }
     }
-    &.selections {
+    &.selection {
+      position: relative;
+
       &.active {
         background: #fac748;
       }
       &:hover {
         background: #fac74866;
+      }
+
+      span {
+        position: absolute;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        background: #b30000;
+        border-radius: 50%;
+        height: 25px;
+        width: 25px;
+        box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+        right: 0;
+        top: 0;
+        transform: translateX(50%) translateY(-30%);
+        font-weight: bold;
       }
     }
     &.workflows {

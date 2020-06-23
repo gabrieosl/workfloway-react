@@ -11,8 +11,8 @@ export const Container = styled.div`
 `;
 
 interface SelectionPanelProps {
-  isAllMarked: boolean;
-  isAnyMarked: boolean;
+  isAllMarked?: boolean;
+  isAnyMarked?: boolean;
 }
 
 export const SelectionPanel = styled.div<SelectionPanelProps>`

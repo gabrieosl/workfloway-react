@@ -6,7 +6,7 @@ import Route from './Route';
 import SignIn from '../pages/SignIn';
 
 import Dashboard from '../pages/Dashboard';
-import Selections from '../pages/Selections';
+import Selection from '../pages/Selection';
 import Workflows from '../pages/Workflows';
 import Activities from '../pages/Activities';
 
@@ -17,7 +17,7 @@ const routes: React.FC = () => {
     <WorkflowProvider>
       <Switch>
         <Route path="/dashboard" component={Dashboard} isPrivate />
-        <Route path="/selections" component={Selections} isPrivate />
+        <Route path="/selection" component={Selection} isPrivate />
         <Route path="/workflows" component={Workflows} isPrivate />
         <Route path="/activities" component={Activities} isPrivate />
         <ReactDOMRoute path="/signin" exact component={SignIn} />

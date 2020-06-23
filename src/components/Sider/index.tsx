@@ -9,10 +9,12 @@ import {
 } from 'react-icons/all';
 
 import { useNavigation } from '../../context/NavigationContext';
+import { useSelection } from '../../context/SelectionContext';
 import { Container, Menu, Settings } from './styles';
 
 const Sider: React.FC = () => {
   const { page } = useNavigation();
+  const { selection } = useSelection();
   return (
     <Container>
       <Menu>
@@ -23,10 +25,11 @@ const Sider: React.FC = () => {
           <FiGrid />
         </Link>
         <Link
-          to="/selections"
-          className={`selections${page === 'selections' ? ' active' : ''}`}
+          to="/selection"
+          className={`selection${page === 'selection' ? ' active' : ''}`}
         >
           <FiList />
+          {!!selection.length && <span>{selection.length}</span>}
         </Link>
         <Link
           to="/workflows"

@@ -36,11 +36,10 @@ interface FilterData {
   [key: string]: { column: string; operation: string; value: string };
 }
 
-const Dashboard: React.FC = () => {
+const Selection: React.FC = () => {
   const { setPage } = useNavigation();
   const { selection, toogleSelection } = useSelection();
 
-  const [items, setItems] = useState<ItemData[]>([]);
   const [filters, setFilters] = useState<FilterData>({
     filter1: {
       column: 'status',
@@ -74,26 +73,7 @@ const Dashboard: React.FC = () => {
     },
   });
 
-  const isAllMarked = useMemo(
-    () => !items.find(item => !selection.includes(item.id)),
-    [items, selection],
-  );
-
-  const isAnyMarked = useMemo(
-    () => !!items.find(item => selection.includes(item.id)),
-    [items, selection],
-  );
-
-  const handleToggleMarkAll = useCallback(() => {
-    // if (isAllMarked) {
-    //   setMarked([]);
-    // } else {
-    //   setMarked(items.map(item => item.id));
-    // }
-    console.log('handleToggleMarkAll');
-  }, [isAllMarked, items]);
-
-  useEffect(() => setPage('dashboard'), [setPage]);
+  useEffect(() => setPage('selection'), [setPage]);
 
   const handleRemoveFilter = useCallback(
     key => {
@@ -117,7 +97,7 @@ const Dashboard: React.FC = () => {
 
   return (
     <Container>
-      <SelectionPanel isAllMarked={isAllMarked} isAnyMarked={isAnyMarked}>
+      <SelectionPanel>
         <strong>List of Products</strong>
         <section>
           <button type="button">Filters</button>
@@ -128,7 +108,7 @@ const Dashboard: React.FC = () => {
           <FiList size={25} />
           {!!selection.length && <span>{selection.length}</span>}
         </button>
-        <button type="button" id="mark-all" onClick={handleToggleMarkAll}>
+        <button type="button" id="mark-all">
           <MdCheck size={25} />
           <MdCheck size={25} />
         </button>
@@ -146,9 +126,9 @@ const Dashboard: React.FC = () => {
           ))}
         </ActiveFilters>
       )}
-      <List items={items} setItems={setItems} />
+      <List items={selection} setItems={setItems} />
     </Container>
   );
 };
 
-export default Dashboard;
+export default Selection;
