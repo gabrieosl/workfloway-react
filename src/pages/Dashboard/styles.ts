@@ -12,7 +12,6 @@ export const Container = styled.div`
 
 interface SelectionPanelProps {
   isAllMarked: boolean;
-  isAnyMarked: boolean;
 }
 
 export const SelectionPanel = styled.div<SelectionPanelProps>`
@@ -45,30 +44,6 @@ export const SelectionPanel = styled.div<SelectionPanelProps>`
 
     &:hover {
       box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.4);
-    }
-
-    &#add-selection {
-      background: ${props => (props.isAnyMarked ? '#fac748' : '#ddd')};
-      cursor: ${props => (props.isAnyMarked ? 'pointer' : 'not-allowed')};
-      padding: 0 8px;
-
-      span {
-        position: absolute;
-
-        display: flex;
-        align-items: center;
-        justify-content: center;
-
-        background: #b30000;
-        border-radius: 50%;
-        height: 25px;
-        width: 25px;
-        box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
-        right: 0;
-        top: 0;
-        transform: translateX(50%) translateY(-30%);
-        font-weight: bold;
-      }
     }
 
     &#mark-all {

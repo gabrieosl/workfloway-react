@@ -1,21 +1,13 @@
 import React, { useEffect, useState, useCallback, useMemo } from 'react';
 
-import {
-  FiPlus,
-  GrEdit,
-  MdCheck,
-  MdClose,
-  MdAdd,
-  FiList,
-} from 'react-icons/all';
+import { MdCheck, MdClose } from 'react-icons/all';
 import produce from 'immer';
 import { useNavigation } from '../../context/NavigationContext';
 import { useSelection } from '../../context/SelectionContext';
 
-import List from '../../components/ItemsList';
+import List from '../../components/List';
 
 import { Container, SelectionPanel, ActiveFilters } from './styles';
-import api from '../../services/api';
 
 interface ItemData {
   id: string;
@@ -38,7 +30,7 @@ interface FilterData {
 
 const Dashboard: React.FC = () => {
   const { setPage } = useNavigation();
-  const { selection, toogleSelection } = useSelection();
+  const { isSelected, addToSelection, removeFromSelection } = useSelection();
 
   const [items, setItems] = useState<ItemData[]>([]);
   const [filters, setFilters] = useState<FilterData>({
@@ -47,51 +39,20 @@ const Dashboard: React.FC = () => {
       operation: '=',
       value: 'fgadfg to load',
     },
-    filter2: {
-      column: 'status',
-      operation: '=',
-      value: 'dfbfbfbd',
-    },
-    filter3: {
-      column: 'status',
-      operation: '=',
-      value: 'fsdfsdfdsfewr',
-    },
-    filter4: {
-      column: 'status',
-      operation: '=',
-      value: 'ghjgjghj',
-    },
-    filter5: {
-      column: 'status',
-      operation: '=',
-      value: '34wersdfre',
-    },
-    filter6: {
-      column: 'status',
-      operation: '=',
-      value: 'wit9wpto',
-    },
   });
 
-  const isAllMarked = useMemo(
-    () => !items.find(item => !selection.includes(item.id)),
-    [items, selection],
-  );
-
-  const isAnyMarked = useMemo(
-    () => !!items.find(item => selection.includes(item.id)),
-    [items, selection],
-  );
+  const isAllMarked = useMemo(() => !items.find(item => !isSelected(item.id)), [
+    isSelected,
+    items,
+  ]);
 
   const handleToggleMarkAll = useCallback(() => {
-    // if (isAllMarked) {
-    //   setMarked([]);
-    // } else {
-    //   setMarked(items.map(item => item.id));
-    // }
-    console.log('handleToggleMarkAll');
-  }, [isAllMarked, items]);
+    if (!isAllMarked) {
+      addToSelection(items);
+    } else {
+      removeFromSelection(items);
+    }
+  }, [addToSelection, isAllMarked, items, removeFromSelection]);
 
   useEffect(() => setPage('dashboard'), [setPage]);
 
@@ -117,17 +78,12 @@ const Dashboard: React.FC = () => {
 
   return (
     <Container>
-      <SelectionPanel isAllMarked={isAllMarked} isAnyMarked={isAnyMarked}>
+      <SelectionPanel isAllMarked={isAllMarked}>
         <strong>List of Products</strong>
         <section>
           <button type="button">Filters</button>
           <input type="options" />
         </section>
-        <button type="button" id="add-selection">
-          <FiPlus />
-          <FiList size={25} />
-          {!!selection.length && <span>{selection.length}</span>}
-        </button>
         <button type="button" id="mark-all" onClick={handleToggleMarkAll}>
           <MdCheck size={25} />
           <MdCheck size={25} />
