@@ -40,37 +40,43 @@ const List: React.FC<ListProps> = ({ items, type = 'show', children }) => {
 
   return (
     <Container>
-      {items.map(item => (
-        <Item
-          key={item.id}
-          selected={isSelected(item.id)}
-          isRemovable={isRemovable}
-        >
-          <strong>{item.name}</strong>
-          <span>
-            {item.lastObservation
-              ? getTypeName(item.lastObservation.type_id)
-              : '---'}
-          </span>
-          <small>
-            {item.lastSubmission ? item.lastSubmission.repetition : '0'}
-          </small>
-          <div>
-            {item.lastObservation && (
-              <>
-                <p>
-                  <GrEdit />
-                  {item.lastObservation.user.name}
-                </p>
-                <p>{formatTime(item.lastObservation.created_at)}</p>
-              </>
-            )}
-          </div>
-          <button type="button" onClick={() => toogleSelection(item)}>
-            {isRemovable ? <MdClose size={25} /> : <MdCheck size={25} />}
-          </button>
-        </Item>
-      ))}
+      {items.length > 0 ? (
+        items.map(item => (
+          <Item
+            key={item.id}
+            selected={isSelected(item.id)}
+            isRemovable={isRemovable}
+          >
+            <strong>{item.name}</strong>
+            <span>
+              {item.lastObservation
+                ? getTypeName(item.lastObservation.type_id)
+                : '---'}
+            </span>
+            <small>
+              {item.lastSubmission ? item.lastSubmission.repetition : '0'}
+            </small>
+            <div>
+              {item.lastObservation && (
+                <>
+                  <p>
+                    <GrEdit />
+                    {item.lastObservation.user.name}
+                  </p>
+                  <p>{formatTime(item.lastObservation.created_at)}</p>
+                </>
+              )}
+            </div>
+            <button type="button" onClick={() => toogleSelection(item)}>
+              {isRemovable ? <MdClose size={25} /> : <MdCheck size={25} />}
+            </button>
+          </Item>
+        ))
+      ) : (
+        <section>
+          <h1>Empty</h1>
+        </section>
+      )}
       {children}
     </Container>
   );

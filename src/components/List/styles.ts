@@ -11,6 +11,7 @@ export const Container = styled.main`
 
   overflow-y: auto;
   padding: 10px;
+  box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.4);
 
   > button {
     align-self: center;
@@ -22,6 +23,13 @@ export const Container = styled.main`
     margin-top: 14px;
     box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.3);
     color: #067bc2;
+  }
+
+  section {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 `;
 
