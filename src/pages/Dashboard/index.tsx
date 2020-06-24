@@ -7,6 +7,7 @@ import { useSelection } from '../../context/SelectionContext';
 import api from '../../services/api';
 
 import List from '../../components/List';
+import CreateObservation from '../../components/CreateObservation';
 
 import { Container, SelectionPanel, ActiveFilters } from './styles';
 
@@ -107,39 +108,42 @@ const Dashboard: React.FC = () => {
   }, []);
 
   return (
-    <Container>
-      <SelectionPanel isAllMarked={isAllMarked}>
-        <strong>List of Products</strong>
-        <section>
-          <button type="button">Filters</button>
-          <input type="options" />
-        </section>
-        <button type="button" id="mark-all" onClick={handleToggleMarkAll}>
-          <MdCheck size={25} />
-          <MdCheck size={25} />
-        </button>
-      </SelectionPanel>
-      {!!Object.keys(filters).length && (
-        <ActiveFilters>
-          <span>Active filters:</span>
-          {Object.keys(filters).map(key => (
-            <div key={key} id={key}>
-              <span>{`${filters[key].column} ${filters[key].operation} ${filters[key].value}`}</span>
-              <button type="button" onClick={() => handleRemoveFilter(key)}>
-                <MdClose />
-              </button>
-            </div>
-          ))}
-        </ActiveFilters>
-      )}
-      <List items={items}>
-        {currentPage > 0 && (
-          <button type="button" onClick={handleLoadMoreItems}>
-            <MdAdd size={30} />
+    <>
+      <Container>
+        <SelectionPanel isAllMarked={isAllMarked}>
+          <strong>List of Products</strong>
+          <section>
+            <button type="button">Filters</button>
+            <input type="options" />
+          </section>
+          <button type="button" id="mark-all" onClick={handleToggleMarkAll}>
+            <MdCheck size={25} />
+            <MdCheck size={25} />
           </button>
+        </SelectionPanel>
+        {!!Object.keys(filters).length && (
+          <ActiveFilters>
+            <span>Active filters:</span>
+            {Object.keys(filters).map(key => (
+              <div key={key} id={key}>
+                <span>{`${filters[key].column} ${filters[key].operation} ${filters[key].value}`}</span>
+                <button type="button" onClick={() => handleRemoveFilter(key)}>
+                  <MdClose />
+                </button>
+              </div>
+            ))}
+          </ActiveFilters>
         )}
-      </List>
-    </Container>
+        <List items={items}>
+          {currentPage > 0 && (
+            <button type="button" onClick={handleLoadMoreItems}>
+              <MdAdd size={30} />
+            </button>
+          )}
+        </List>
+      </Container>
+      <CreateObservation initialTypeSelectedId="b1dcfa79-d1ff-4922-b482-ad5629c970a3" />
+    </>
   );
 };
 

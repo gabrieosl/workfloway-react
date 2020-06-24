@@ -131,4 +131,8 @@ export const Item = styled.div<ItemProps>`
         }
       `};
   }
+
+  &:last-child {
+    margin-bottom: 100px;
+  }
 `;

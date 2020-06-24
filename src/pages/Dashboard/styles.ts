@@ -40,7 +40,7 @@ export const SelectionPanel = styled.div<SelectionPanelProps>`
     border: 0;
     border-radius: 5px;
     color: #fff;
-    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.4);
 
     &:hover {
       box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.4);
