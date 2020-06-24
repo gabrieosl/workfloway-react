@@ -22,6 +22,7 @@ interface ContextData {
   removeFromSelection(item: ItemData[]): void;
   toogleSelection(item: ItemData): void;
   isSelected(id: string): boolean;
+  clearSelection(): void;
 }
 
 const SelectionContext = createContext<ContextData>({} as ContextData);
@@ -91,6 +92,10 @@ const SelectionProvider: React.FC = ({ children }) => {
     [selection],
   );
 
+  const clearSelection = useCallback(() => {
+    setSelection([]);
+  }, []);
+
   // TODO
   // add filter
 
@@ -102,6 +107,7 @@ const SelectionProvider: React.FC = ({ children }) => {
         removeFromSelection,
         toogleSelection,
         isSelected,
+        clearSelection,
       }}
     >
       {children}
