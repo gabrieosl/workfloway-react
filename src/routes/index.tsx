@@ -9,6 +9,7 @@ import Dashboard from '../pages/Dashboard';
 import Selection from '../pages/Selection';
 import Workflows from '../pages/Workflows';
 import Activities from '../pages/Activities';
+import Settings from '../pages/Settings';
 
 import { WorkflowProvider } from '../context/WorkflowContext';
 
@@ -20,6 +21,7 @@ const routes: React.FC = () => {
         <Route path="/selection" component={Selection} isPrivate />
         <Route path="/workflows" component={Workflows} isPrivate />
         <Route path="/activities" component={Activities} isPrivate />
+        <Route path="/settings" component={Settings} isPrivate />
         <ReactDOMRoute path="/signin" exact component={SignIn} />
         <ReactDOMRoute
           path="/"

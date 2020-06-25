@@ -44,7 +44,10 @@ const Sider: React.FC = () => {
           <AiOutlineFileText />
         </Link>
       </Menu>
-      <Settings to="/" className={page === 'settings' ? 'selected' : ''}>
+      <Settings
+        to="/settings"
+        className={`settings${page === 'settings' ? ' active' : ''}`}
+      >
         <BsGearFill />
       </Settings>
     </Container>

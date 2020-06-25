@@ -82,6 +82,16 @@ export const Container = styled.div`
     &.activities {
       &.active {
         background: #dedede;
+        color: #777;
+      }
+      &:hover {
+        background: #dedede66;
+      }
+    }
+    &.settings {
+      &.active {
+        background: #dedede;
+        color: #777;
       }
       &:hover {
         background: #dedede66;
