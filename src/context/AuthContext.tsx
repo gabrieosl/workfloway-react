@@ -58,11 +58,6 @@ export const AuthProvider: React.FC = ({ children }) => {
     setData({} as AuthState);
   }, []);
 
-  useEffect(() => {
-    localStorage.setItem('@Workfloway:token', JSON.stringify(data.token || ''));
-    localStorage.setItem('@Workfloway:user', JSON.stringify(data.user || ''));
-  }, [data]);
-
   return (
     <AuthContext.Provider value={{ user: data.user, signIn, signOut }}>
       {children}

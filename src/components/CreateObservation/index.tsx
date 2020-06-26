@@ -1,7 +1,10 @@
 import React, { useMemo, useState, useCallback, useEffect } from 'react';
 import Select from 'react-select';
+import { toast } from 'react-toastify';
 
 import { MdAdd, FiSend, MdCancel } from 'react-icons/all';
+
+import api from '../../services/api';
 
 import { useSelection } from '../../context/SelectionContext';
 import { useTypes } from '../../context/TypesContext';
@@ -54,9 +57,28 @@ const CreateObservation: React.FC<CreateObservationProps> = ({
 
   const isAnySelected = useMemo(() => !!selection.length, [selection]);
 
-  const handleSubmit = useCallback(() => {
-    console.log(value, comment, selectedType.value);
-  }, [comment, selectedType.value, value]);
+  const handleSubmit = useCallback(async () => {
+    const listOfTargets = selection.reduce((all, currentItem) => {
+      all.push(currentItem.id);
+      return all;
+    }, [] as string[]);
+
+    const params = {
+      type_id: selectedType.value,
+      value,
+      comment,
+      subject_ids: listOfTargets,
+      user_id: '228ff1eb-620a-4fbe-ba5e-6b815bdcfe3f',
+    };
+    console.log(params);
+
+    const response = await api.post('/observations', params);
+    if (response.status === 200) {
+      toast.success('Created!');
+    } else {
+      toast.error('Error!');
+    }
+  }, [comment, selectedType.value, selection, value]);
 
   const numberOfSelected = useMemo(() => selection.length, [selection]);
 

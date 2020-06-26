@@ -9,8 +9,7 @@ interface NavigationState {
 interface ContextData {
   page: string;
   subpage: string;
-  setPage(_page: string): void;
-  setSubpage(_subpage: string): void;
+  setPage(_page: string, _subpage?: string): void;
 }
 
 const NavigationContext = createContext<ContextData>({} as ContextData);
@@ -21,20 +20,14 @@ export const NavigationProvider: React.FC = ({ children }) => {
     subpage: '',
   });
 
-  const setPage = useCallback((_page: string) => {
+  const setPage = useCallback((_page: string, _subpage = '') => {
     setData(prev =>
       produce(prev, draft => {
         draft.page = _page;
+        draft.subpage = _subpage;
         return draft;
       }),
     );
-  }, []);
-
-  const setSubpage = useCallback((_subpage: string) => {
-    setData(prev => {
-      prev.subpage = _subpage;
-      return prev;
-    });
   }, []);
 
   return (
@@ -43,7 +36,6 @@ export const NavigationProvider: React.FC = ({ children }) => {
         page: data.page,
         subpage: data.subpage,
         setPage,
-        setSubpage,
       }}
     >
       {children}
