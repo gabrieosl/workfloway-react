@@ -16,24 +16,6 @@ export const Submenu = styled.div`
   justify-content: space-between;
   margin-bottom: 18px;
 
-  button.add-item {
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
-    background: #067bc2;
-    border: 0;
-    border-radius: 5px;
-    height: 36px;
-    padding: 0 10px;
-    color: #fff;
-    font-weight: bold;
-    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.4);
-
-    svg {
-      margin-right: 5px;
-    }
-  }
-
   nav > button {
     background: none;
     border: 0;

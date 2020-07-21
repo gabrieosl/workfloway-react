@@ -4,7 +4,7 @@ import { MdAdd } from 'react-icons/md';
 import { useNavigation } from '../../context/NavigationContext';
 
 import Observations from './Observations';
-import Products from './Products';
+import Tags from './Tags';
 import Submissions from './Submissions';
 
 import { Container, Submenu } from './styles';
@@ -14,12 +14,12 @@ interface SubmenuComponentsInterface {
 }
 const SubmenuComponents: SubmenuComponentsInterface = {
   observations: Observations,
-  products: Products,
+  tags: Tags,
   submissions: Submissions,
 };
 
 const Settings: React.FC = () => {
-  const [submenu, setSubmenu] = useState('observations');
+  const [submenu, setSubmenu] = useState('tags');
   const { setPage } = useNavigation();
 
   const Component = useMemo(() => {
@@ -36,30 +36,26 @@ const Settings: React.FC = () => {
         <nav>
           <button
             type="button"
+            onClick={() => setSubmenu('tags')}
+            className={submenu === 'tags' ? ' active' : ''}
+          >
+            Tags
+          </button>
+          <button
+            type="button"
             onClick={() => setSubmenu('observations')}
             className={submenu === 'observations' ? ' active' : ''}
           >
             Observation Types
           </button>
-          <button
-            type="button"
-            onClick={() => setSubmenu('products')}
-            className={submenu === 'products' ? ' active' : ''}
-          >
-            Products
-          </button>
-          <button
+          {/* <button
             type="button"
             onClick={() => setSubmenu('submissions')}
             className={submenu === 'submissions' ? ' active' : ''}
           >
             Submissions
-          </button>
+          </button> */}
         </nav>
-        <button type="button" className="add-item">
-          <MdAdd />
-          Add item
-        </button>
       </Submenu>
       <Component />
     </Container>

@@ -1,10 +1,4 @@
-import React, {
-  useState,
-  useEffect,
-  createContext,
-  useCallback,
-  useContext,
-} from 'react';
+import React, { useState, createContext, useCallback, useContext } from 'react';
 
 import api from '../services/api';
 

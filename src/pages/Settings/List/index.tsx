@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useState, useCallback } from 'react';
 
-import { MdDelete, MdEdit } from 'react-icons/md';
-import { Container, Item } from './styles';
+import { MdDelete, MdEdit, MdCheck, MdClose } from 'react-icons/md';
+import { Container, Item, ItemButtonsHolder } from './styles';
 
 interface ListProps {
   items: {
@@ -13,27 +13,59 @@ interface ListProps {
 }
 
 const List: React.FC<ListProps> = ({ items, handleEdit, handleDelete }) => {
+  const [toDelete, setToDelete] = useState('');
+
+  const confirmDeletion = useCallback(
+    (id: string) => {
+      handleDelete(id);
+      setToDelete('');
+    },
+    [handleDelete],
+  );
+
   return (
     <Container>
       {items.map(item => (
         <Item>
           <strong>{item.name}</strong>
-          <div>
-            <button
-              className="edit"
-              type="button"
-              onClick={() => handleEdit(item.id)}
-            >
-              <MdEdit />
-            </button>
-            <button
-              className="delete"
-              type="button"
-              onClick={() => handleDelete(item.id)}
-            >
-              <MdDelete />
-            </button>
-          </div>
+          <ItemButtonsHolder>
+            {toDelete === item.id ? (
+              <>
+                <strong>Confirm?</strong>
+                <button
+                  className="confirm"
+                  type="button"
+                  onClick={() => confirmDeletion(item.id)}
+                >
+                  <MdCheck />
+                </button>
+                <button
+                  className="delete"
+                  type="button"
+                  onClick={() => setToDelete('')}
+                >
+                  <MdClose />
+                </button>
+              </>
+            ) : (
+              <>
+                <button
+                  className="edit"
+                  type="button"
+                  onClick={() => handleEdit(item.id)}
+                >
+                  <MdEdit />
+                </button>
+                <button
+                  className="delete"
+                  type="button"
+                  onClick={() => setToDelete(item.id)}
+                >
+                  <MdDelete />
+                </button>
+              </>
+            )}
+          </ItemButtonsHolder>
         </Item>
       ))}
     </Container>

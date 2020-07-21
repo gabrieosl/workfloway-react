@@ -4,7 +4,7 @@ import {
   FiGrid,
   FiList,
   IoIosGitNetwork,
-  AiOutlineFileText,
+  MdHistory,
   BsGearFill,
 } from 'react-icons/all';
 
@@ -41,7 +41,7 @@ const Sider: React.FC = () => {
           to="/activities"
           className={`activities${page === 'activities' ? ' active' : ''}`}
         >
-          <AiOutlineFileText />
+          <MdHistory />
         </Link>
       </Menu>
       <Settings

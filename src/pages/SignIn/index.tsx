@@ -1,4 +1,5 @@
 import React, { useCallback, useRef } from 'react';
+import { Redirect } from 'react-router-dom';
 import { FiMail, FaLock } from 'react-icons/all';
 import { FormHandles } from '@unform/core';
 import { Form } from '@unform/web';
@@ -19,7 +20,7 @@ interface SignInFormData {
 const SignIn: React.FC = () => {
   const formRef = useRef<FormHandles>(null);
 
-  const { signIn } = useAuth();
+  const { signIn, user } = useAuth();
 
   const handleSubmit = useCallback(
     async (data: SignInFormData) => {
@@ -47,7 +48,9 @@ const SignIn: React.FC = () => {
     [signIn],
   );
 
-  return (
+  return user ? (
+    <Redirect to="dashboard" />
+  ) : (
     <Container>
       <Content>
         <Form ref={formRef} onSubmit={handleSubmit}>
