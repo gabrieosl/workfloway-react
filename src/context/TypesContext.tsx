@@ -15,20 +15,13 @@ interface TypesItemData {
 interface ContextData {
   types: TypesItemData[];
   getTypeName(id: string): string | undefined;
+  refreshTypes(): void;
 }
 
 const TypesContext = createContext<ContextData>({} as ContextData);
 
 const TypesProvider: React.FC = ({ children }) => {
   const [types, setTypes] = useState<TypesItemData[]>([]);
-
-  useEffect(() => {
-    api.get('/observationtypes').then(response => {
-      if (response.status === 200) {
-        setTypes(response.data);
-      }
-    });
-  }, []);
 
   const getTypeName = useCallback(
     (id: string) => {
@@ -38,8 +31,20 @@ const TypesProvider: React.FC = ({ children }) => {
     [types],
   );
 
+  const refreshTypes = useCallback(() => {
+    api.get('/types').then(response => {
+      if (response.status === 200) {
+        setTypes(response.data);
+      }
+    });
+  }, []);
+
+  useEffect(() => {
+    refreshTypes();
+  }, [refreshTypes]);
+
   return (
-    <TypesContext.Provider value={{ types, getTypeName }}>
+    <TypesContext.Provider value={{ types, getTypeName, refreshTypes }}>
       {children}
     </TypesContext.Provider>
   );

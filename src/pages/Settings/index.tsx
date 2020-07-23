@@ -1,11 +1,9 @@
 import React, { useState, useMemo, useEffect } from 'react';
 
-import { MdAdd } from 'react-icons/md';
 import { useNavigation } from '../../context/NavigationContext';
 
 import Observations from './Observations';
 import Tags from './Tags';
-import Submissions from './Submissions';
 
 import { Container, Submenu } from './styles';
 
@@ -15,7 +13,6 @@ interface SubmenuComponentsInterface {
 const SubmenuComponents: SubmenuComponentsInterface = {
   observations: Observations,
   tags: Tags,
-  submissions: Submissions,
 };
 
 const Settings: React.FC = () => {
@@ -48,13 +45,6 @@ const Settings: React.FC = () => {
           >
             Observation Types
           </button>
-          {/* <button
-            type="button"
-            onClick={() => setSubmenu('submissions')}
-            className={submenu === 'submissions' ? ' active' : ''}
-          >
-            Submissions
-          </button> */}
         </nav>
       </Submenu>
       <Component />

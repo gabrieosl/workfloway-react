@@ -3,7 +3,7 @@ import { FormHandles } from '@unform/core';
 import { Form } from '@unform/web';
 import * as Yup from 'yup';
 
-import { MdAdd, FiTag } from 'react-icons/all';
+import { FiTag } from 'react-icons/all';
 import { toast } from 'react-toastify';
 
 import api from '../../../services/api';
@@ -39,22 +39,31 @@ const Tags: React.FC = () => {
           name: data.name,
         });
         tags.push(tag.data);
-        console.log('lala');
         toast.success('Criado');
       } catch (err) {
         toast.error(err);
       }
+      window.location.reload();
     },
     [tags],
   );
 
   const handleDelete = useCallback(id => {
     api.delete(`/tags/${id}`).then(response => {
-      if (response.status === 200) {
+      if (response.status === 204) {
         toast.success('Removido');
       }
     });
     setTags(prev => prev.filter(tag => tag.id !== id));
+  }, []);
+
+  const handleUpdate = useCallback((id, newData) => {
+    api.put(`tags/${id}`, newData).then(response => {
+      if (response.status === 200) {
+        toast.success('Atualizado');
+        setTags(prev => prev.map(tag => (tag.id !== id ? tag : response.data)));
+      }
+    });
   }, []);
 
   useEffect(() => {
@@ -82,7 +91,11 @@ const Tags: React.FC = () => {
           </Form>
         </CreateNew>
       </ButtonBox>
-      <List items={tags} handleDelete={handleDelete} handleEdit={id => null} />
+      <List
+        items={tags}
+        handleDelete={handleDelete}
+        handleUpdate={handleUpdate}
+      />
     </Container>
   );
 };
