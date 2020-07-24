@@ -1,15 +1,17 @@
 import React, { useEffect, useState, useCallback, useMemo } from 'react';
-
 import { MdCheck, MdClose, MdAdd } from 'react-icons/all';
 import produce from 'immer';
+
 import { useNavigation } from '../../context/NavigationContext';
 import { useSelection } from '../../context/SelectionContext';
 import api from '../../services/api';
 
 import List from '../../components/List';
 import CreateObservation from '../../components/CreateObservation';
+import CreateProduct from '../../components/CreateProduct';
 
 import { Container, SelectionPanel, ActiveFilters } from './styles';
+import CreateNewPopup from '../../components/CreateNewPopup';
 
 interface ItemData {
   id: string;
@@ -116,7 +118,14 @@ const Dashboard: React.FC = () => {
             <button type="button">Filters</button>
             <input type="options" />
           </section>
-          <button type="button" id="mark-all" onClick={handleToggleMarkAll}>
+          <CreateNewPopup text="New Product">
+            <CreateProduct />
+          </CreateNewPopup>
+          <button
+            type="button"
+            className="mark-all"
+            onClick={handleToggleMarkAll}
+          >
             <MdCheck size={25} />
             <MdCheck size={25} />
           </button>

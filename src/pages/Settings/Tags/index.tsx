@@ -9,7 +9,7 @@ import { toast } from 'react-toastify';
 import api from '../../../services/api';
 
 import List from '../List';
-import CreateNew from '../../../components/CreateNew';
+import CreateNewPopup from '../../../components/CreateNewPopup';
 import Input from '../../../components/Input';
 import { Container, ButtonBox } from './styles';
 
@@ -79,7 +79,7 @@ const Tags: React.FC = () => {
   return (
     <Container>
       <ButtonBox>
-        <CreateNew text="New Tag">
+        <CreateNewPopup text="New Tag">
           <Form ref={formRef} onSubmit={handleSubmit}>
             <Input
               name="name"
@@ -89,7 +89,7 @@ const Tags: React.FC = () => {
             />
             <button type="submit">Criar</button>
           </Form>
-        </CreateNew>
+        </CreateNewPopup>
       </ButtonBox>
       <List
         items={tags}

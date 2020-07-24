@@ -3,11 +3,11 @@ import React, { useState } from 'react';
 import { MdClose, MdAdd } from 'react-icons/md';
 import { CreateButton, Container, Content } from './styles';
 
-interface CreateNewProps {
+interface CreateNewPopupProps {
   text: string;
 }
 
-const CreateNew: React.FC<CreateNewProps> = ({ children, text }) => {
+const CreateNewPopup: React.FC<CreateNewPopupProps> = ({ children, text }) => {
   const [showCard, setShowCard] = useState(false);
 
   return (
@@ -36,4 +36,4 @@ const CreateNew: React.FC<CreateNewProps> = ({ children, text }) => {
   );
 };
 
-export default CreateNew;
+export default CreateNewPopup;

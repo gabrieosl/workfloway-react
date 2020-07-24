@@ -11,7 +11,7 @@ import api from '../../../services/api';
 import { useTypes } from '../../../context/TypesContext';
 
 import List from '../List';
-import CreateNew from '../../../components/CreateNew';
+import CreateNewPopup from '../../../components/CreateNewPopup';
 import Input from '../../../components/Input';
 import { Container, ButtonBox } from './styles';
 
@@ -77,7 +77,7 @@ const ObservationTypess: React.FC = () => {
   return (
     <Container>
       <ButtonBox>
-        <CreateNew text="New Type">
+        <CreateNewPopup text="New Type">
           <Form ref={formRef} onSubmit={handleSubmit}>
             <Input
               name="name"
@@ -87,7 +87,7 @@ const ObservationTypess: React.FC = () => {
             />
             <button type="submit">Criar</button>
           </Form>
-        </CreateNew>
+        </CreateNewPopup>
       </ButtonBox>
       <List
         items={types}

@@ -46,7 +46,13 @@ export const SelectionPanel = styled.div<SelectionPanelProps>`
       box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.4);
     }
 
-    &#mark-all {
+    &.new {
+      background: #006600;
+      font-weight: bold;
+      padding: 0 10px;
+    }
+
+    &.mark-all {
       background: ${props => (props.isAllMarked ? '#ddd' : '#fac748')};
       border-radius: 50%;
       width: 40px;

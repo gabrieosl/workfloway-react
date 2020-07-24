@@ -64,17 +64,18 @@ const CreateObservation: React.FC<CreateObservationProps> = ({
     }, [] as string[]);
 
     const params = {
-      type_id: selectedType.value,
       value,
       comment,
+      type_id: selectedType.value,
       subject_ids: listOfTargets,
-      user_id: '228ff1eb-620a-4fbe-ba5e-6b815bdcfe3f',
+      user_id: 'a955debd-682c-4751-8ca5-a5b680dab05b',
     };
     console.log(params);
 
     const response = await api.post('/observations', params);
-    if (response.status === 200) {
+    if (response.status === 201) {
       toast.success('Created!');
+      // window.location.reload(false);
     } else {
       toast.error('Error!');
     }

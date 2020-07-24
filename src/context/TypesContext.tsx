@@ -14,14 +14,18 @@ interface TypesItemData {
 
 interface ContextData {
   types: TypesItemData[];
+  tags: TypesItemData[];
   getTypeName(id: string): string | undefined;
+  getTagId(name: string): string | undefined;
   refreshTypes(): void;
+  refreshTags(): void;
 }
 
 const TypesContext = createContext<ContextData>({} as ContextData);
 
 const TypesProvider: React.FC = ({ children }) => {
   const [types, setTypes] = useState<TypesItemData[]>([]);
+  const [tags, setTags] = useState<TypesItemData[]>([]);
 
   const getTypeName = useCallback(
     (id: string) => {
@@ -29,6 +33,14 @@ const TypesProvider: React.FC = ({ children }) => {
       return type ? type.name : undefined;
     },
     [types],
+  );
+
+  const getTagId = useCallback(
+    (name: string) => {
+      const tag = tags.find(_tag => _tag.name === name);
+      return tag ? tag.id : undefined;
+    },
+    [tags],
   );
 
   const refreshTypes = useCallback(() => {
@@ -39,12 +51,30 @@ const TypesProvider: React.FC = ({ children }) => {
     });
   }, []);
 
+  const refreshTags = useCallback(() => {
+    api.get('/tags').then(response => {
+      if (response.status === 200) {
+        setTags(response.data);
+      }
+    });
+  }, []);
+
   useEffect(() => {
     refreshTypes();
-  }, [refreshTypes]);
+    refreshTags();
+  }, [refreshTypes, refreshTags]);
 
   return (
-    <TypesContext.Provider value={{ types, getTypeName, refreshTypes }}>
+    <TypesContext.Provider
+      value={{
+        types,
+        tags,
+        getTypeName,
+        getTagId,
+        refreshTypes,
+        refreshTags,
+      }}
+    >
       {children}
     </TypesContext.Provider>
   );
