@@ -20,6 +20,10 @@ interface ItemData {
   lastSubmission?: {
     repetition: number;
   };
+  tags: {
+    tagId: string;
+    value: string;
+  }[];
 }
 interface ListProps {
   items: ItemData[];
@@ -28,7 +32,7 @@ interface ListProps {
 
 const List: React.FC<ListProps> = ({ items, type = 'show', children }) => {
   const { toogleSelection, isSelected } = useSelection();
-  const { getTypeName } = useTypes();
+  const { getTypeName, getTagName } = useTypes();
 
   const isRemovable = useMemo(() => type === 'select', [type]);
 
@@ -47,7 +51,17 @@ const List: React.FC<ListProps> = ({ items, type = 'show', children }) => {
             selected={isSelected(item.id)}
             isRemovable={isRemovable}
           >
-            <strong>{item.name}</strong>
+            <strong>
+              {item.name}
+              <div className="tags-holder">
+                {item.tags.map(tag => (
+                  <div className="tag">
+                    <strong>{getTagName(tag.tagId)}</strong>
+                    <small>{tag.value}</small>
+                  </div>
+                ))}
+              </div>
+            </strong>
             <span>
               {item.lastObservation
                 ? getTypeName(item.lastObservation.type_id)

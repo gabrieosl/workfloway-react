@@ -53,14 +53,40 @@ export const Item = styled.div<ItemProps>`
   }
 
   > strong {
-    flex: 1;
     /* max-width: 300px; */
     font-size: 18px;
+    display: flex;
+    align-items: center;
+  }
+
+  div.tags-holder {
+    display: flex;
+    flex-direction: row;
+    /* align-self: flex-end; */
+
+    div.tag {
+      background: #ddd;
+      border-radius: 4px;
+      box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.4);
+      padding: 4px;
+      display: flex;
+      margin: 0 3px;
+
+      align-items: center;
+
+      strong {
+        font-size: 16px;
+        color: #888;
+      }
+      small {
+        margin-left: 4px;
+        font-size: 14px;
+      }
+    }
   }
 
   > span {
     flex: 1;
-
     margin: 0 8px;
 
     text-align: right;

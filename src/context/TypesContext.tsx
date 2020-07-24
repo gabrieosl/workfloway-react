@@ -16,6 +16,7 @@ interface ContextData {
   types: TypesItemData[];
   tags: TypesItemData[];
   getTypeName(id: string): string | undefined;
+  getTagName(id: string): string | undefined;
   getTagId(name: string): string | undefined;
   refreshTypes(): void;
   refreshTags(): void;
@@ -33,6 +34,14 @@ const TypesProvider: React.FC = ({ children }) => {
       return type ? type.name : undefined;
     },
     [types],
+  );
+
+  const getTagName = useCallback(
+    (id: string) => {
+      const tag = tags.find(_tag => _tag.id === id);
+      return tag ? tag.name : undefined;
+    },
+    [tags],
   );
 
   const getTagId = useCallback(
@@ -70,6 +79,7 @@ const TypesProvider: React.FC = ({ children }) => {
         types,
         tags,
         getTypeName,
+        getTagName,
         getTagId,
         refreshTypes,
         refreshTags,

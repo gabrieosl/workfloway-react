@@ -14,6 +14,10 @@ interface ItemData {
   lastSubmission?: {
     repetition: number;
   };
+  tags: {
+    tagId: string;
+    value: string;
+  }[];
 }
 
 interface ContextData {
