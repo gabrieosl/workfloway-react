@@ -67,8 +67,8 @@ export const Item = styled.div<ItemProps>`
     div.tag {
       background: #ddd;
       border-radius: 4px;
-      box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.4);
-      padding: 4px;
+      box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
+      padding: 2px 4px;
       display: flex;
       margin: 0 3px;
 

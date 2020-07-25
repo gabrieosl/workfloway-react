@@ -54,12 +54,19 @@ const List: React.FC<ListProps> = ({ items, type = 'show', children }) => {
             <strong>
               {item.name}
               <div className="tags-holder">
-                {item.tags.map(tag => (
-                  <div className="tag">
-                    <strong>{getTagName(tag.tagId)}</strong>
-                    <small>{tag.value}</small>
-                  </div>
-                ))}
+                {item.tags &&
+                  item.tags
+                    // .sort((a, b) => {
+                    //   if (a.value < b.value) return -1;
+                    //   if (a.value > b.value) return 1;
+                    //   return 0;
+                    // })
+                    .map(tag => (
+                      <div className="tag">
+                        <strong>{getTagName(tag.tagId)}</strong>
+                        <small>{tag.value}</small>
+                      </div>
+                    ))}
               </div>
             </strong>
             <span>

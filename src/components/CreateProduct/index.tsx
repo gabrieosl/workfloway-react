@@ -99,14 +99,19 @@ const CreateProduct: React.FC = () => {
   const handleOptionChange = useCallback(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (newOption: any) => {
+      console.log(newOption);
       setSelectedOption(newOption);
     },
     [],
   );
 
   const handleSubmit = useCallback(() => {
+    console.log('POST /subjects ', {
+      items: products,
+      workflow_id: selectedOption.value,
+    });
     api
-      .post('/subjects', { items: products })
+      .post('/subjects', { items: products, workflow_id: selectedOption.value })
       .then(response => {
         if (response.status === 201) {
           toast.success('Created!');
@@ -116,7 +121,7 @@ const CreateProduct: React.FC = () => {
       .catch(err => {
         toast.error('Error!');
       });
-  }, [products]);
+  }, [products, selectedOption.value]);
 
   useEffect(() => {
     api.get('/workflows').then(response => {
