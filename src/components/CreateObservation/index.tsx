@@ -68,7 +68,6 @@ const CreateObservation: React.FC<CreateObservationProps> = ({
       comment,
       type_id: selectedType.value,
       subject_ids: listOfTargets,
-      user_id: 'a955debd-682c-4751-8ca5-a5b680dab05b',
     };
     console.log(params);
 
