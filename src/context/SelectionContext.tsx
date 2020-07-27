@@ -60,6 +60,7 @@ const SelectionProvider: React.FC = ({ children }) => {
             if (index >= 0) {
               draft.splice(index, 1);
             }
+            return draft;
           });
           return draft;
         }),
