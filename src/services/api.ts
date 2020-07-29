@@ -28,9 +28,9 @@ api.interceptors.response.use(
   error => {
     // Do something with response error
     console.log('response error');
-    localStorage.removeItem('@Workfloway:token');
-    localStorage.removeItem('@Workfloway:user');
-    window.location.reload();
+    // localStorage.removeItem('@Workfloway:token');
+    // localStorage.removeItem('@Workfloway:user');
+    // window.location.reload();
     return Promise.reject(error);
   },
 );

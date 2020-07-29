@@ -1,7 +1,9 @@
 import React, { useState, createContext, useContext, useCallback } from 'react';
 import produce from 'immer';
 
-interface ItemData {
+import ObjectId from '../utils/mongoIdGenerator';
+
+interface SelectionItemData {
   id: string;
   name: string;
   lastObservation?: {
@@ -20,11 +22,19 @@ interface ItemData {
   }[];
 }
 
+interface SelectionData {
+  id?: string;
+  content: SelectionItemData[];
+  edited?: boolean;
+  name?: string;
+}
+
 interface ContextData {
-  selection: ItemData[];
-  addToSelection(item: ItemData[]): void;
-  removeFromSelection(item: ItemData[]): void;
-  toogleSelection(item: ItemData): void;
+  selection: SelectionData;
+  setSelection(selection: SelectionData): void;
+  addToSelection(item: SelectionItemData[]): void;
+  removeFromSelection(item: SelectionItemData[]): void;
+  toogleSelection(item: SelectionItemData): void;
   isSelected(id: string): boolean;
   clearSelection(): void;
 }
@@ -32,16 +42,24 @@ interface ContextData {
 const SelectionContext = createContext<ContextData>({} as ContextData);
 
 const SelectionProvider: React.FC = ({ children }) => {
-  const [selection, setSelection] = useState<ItemData[]>([]);
+  const [selection, setSelection] = useState<SelectionData>({
+    id: ObjectId(),
+    name: undefined,
+    content: [],
+    edited: false,
+  });
 
   const addToSelection = useCallback(
-    (newItems: ItemData[]): void => {
+    (newItems: SelectionItemData[]): void => {
       setSelection(
         produce(selection, draft => {
           newItems.forEach(newItem => {
-            const index = draft.findIndex(item => item.id === newItem.id);
+            const index = draft.content.findIndex(
+              item => item.id === newItem.id,
+            );
             if (index < 0) {
-              draft.push(newItem);
+              draft.content.push(newItem);
+              draft.edited = true;
             }
           });
           return draft;
@@ -52,13 +70,16 @@ const SelectionProvider: React.FC = ({ children }) => {
   );
 
   const removeFromSelection = useCallback(
-    (itemsToRemove: ItemData[]): void => {
+    (itemsToRemove: SelectionItemData[]): void => {
       setSelection(
         produce(selection, draft => {
           itemsToRemove.map(itemToRemove => {
-            const index = draft.findIndex(item => item.id === itemToRemove.id);
+            const index = draft.content.findIndex(
+              item => item.id === itemToRemove.id,
+            );
             if (index >= 0) {
-              draft.splice(index, 1);
+              draft.content.splice(index, 1);
+              draft.edited = true;
             }
             return draft;
           });
@@ -70,15 +91,16 @@ const SelectionProvider: React.FC = ({ children }) => {
   );
 
   const toogleSelection = useCallback(
-    (item: ItemData): void => {
+    (item: SelectionItemData): void => {
       setSelection(
         produce(selection, draft => {
-          const index = draft.findIndex(_item => _item.id === item.id);
+          const index = draft.content.findIndex(_item => _item.id === item.id);
           if (index >= 0) {
-            draft.splice(index, 1);
+            draft.content.splice(index, 1);
           } else {
-            draft.push(item);
+            draft.content.push(item);
           }
+          draft.edited = true;
           return draft;
         }),
       );
@@ -88,7 +110,7 @@ const SelectionProvider: React.FC = ({ children }) => {
 
   const isSelected = useCallback(
     (id: string): boolean => {
-      const index = selection.findIndex(item => item.id === id);
+      const index = selection.content.findIndex(item => item.id === id);
       if (index >= 0) {
         return true;
       }
@@ -98,7 +120,12 @@ const SelectionProvider: React.FC = ({ children }) => {
   );
 
   const clearSelection = useCallback(() => {
-    setSelection([]);
+    setSelection({
+      id: ObjectId(),
+      name: undefined,
+      content: [],
+      edited: false,
+    });
   }, []);
 
   // TODO
@@ -108,6 +135,7 @@ const SelectionProvider: React.FC = ({ children }) => {
     <SelectionContext.Provider
       value={{
         selection,
+        setSelection,
         addToSelection,
         removeFromSelection,
         toogleSelection,

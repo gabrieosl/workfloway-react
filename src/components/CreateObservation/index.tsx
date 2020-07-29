@@ -55,10 +55,10 @@ const CreateObservation: React.FC<CreateObservationProps> = ({
     setShowCard(!showCard);
   }, [showCard]);
 
-  const isAnySelected = useMemo(() => !!selection.length, [selection]);
+  const isAnySelected = useMemo(() => !!selection.content.length, [selection]);
 
   const handleSubmit = useCallback(async () => {
-    const listOfTargets = selection.reduce((all, currentItem) => {
+    const listOfTargets = selection.content.reduce((all, currentItem) => {
       all.push(currentItem.id);
       return all;
     }, [] as string[]);
@@ -80,7 +80,7 @@ const CreateObservation: React.FC<CreateObservationProps> = ({
     }
   }, [comment, selectedType.value, selection, value]);
 
-  const numberOfSelected = useMemo(() => selection.length, [selection]);
+  const numberOfSelected = useMemo(() => selection.content.length, [selection]);
 
   useEffect(() => {
     setSelectedType({
@@ -129,7 +129,7 @@ const CreateObservation: React.FC<CreateObservationProps> = ({
           <hr />
           <h3>{`To ${numberOfSelected} products`}</h3>
           <div>
-            {selection.map(item => (
+            {selection.content.map(item => (
               <p>{item.name}</p>
             ))}
           </div>

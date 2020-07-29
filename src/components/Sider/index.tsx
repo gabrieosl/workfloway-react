@@ -29,7 +29,9 @@ const Sider: React.FC = () => {
           className={`selection${page === 'selection' ? ' active' : ''}`}
         >
           <FiList />
-          {!!selection.length && <span>{selection.length}</span>}
+          {!!selection.content.length && (
+            <span>{selection.content.length}</span>
+          )}
         </Link>
         <Link
           to="/workflows"
