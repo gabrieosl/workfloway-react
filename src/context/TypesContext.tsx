@@ -7,6 +7,8 @@ import React, {
 } from 'react';
 import api from '../services/api';
 
+import { useAuth } from './AuthContext';
+
 interface TypesItemData {
   id: string;
   name: string;
@@ -25,6 +27,7 @@ interface ContextData {
 const TypesContext = createContext<ContextData>({} as ContextData);
 
 const TypesProvider: React.FC = ({ children }) => {
+  const { user } = useAuth();
   const [types, setTypes] = useState<TypesItemData[]>([]);
   const [tags, setTags] = useState<TypesItemData[]>([]);
 
@@ -53,20 +56,26 @@ const TypesProvider: React.FC = ({ children }) => {
   );
 
   const refreshTypes = useCallback(() => {
+    if (!user) {
+      return;
+    }
     api.get('/types').then(response => {
       if (response.status === 200) {
         setTypes(response.data);
       }
     });
-  }, []);
+  }, [user]);
 
   const refreshTags = useCallback(() => {
+    if (!user) {
+      return;
+    }
     api.get('/tags').then(response => {
       if (response.status === 200) {
         setTags(response.data);
       }
     });
-  }, []);
+  }, [user]);
 
   useEffect(() => {
     refreshTypes();

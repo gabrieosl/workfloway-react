@@ -2538,6 +2538,11 @@ aws4@^1.8.0:
   resolved "https://registry.yarnpkg.com/aws4/-/aws4-1.10.0.tgz#a17b3a8ea811060e74d47d306122400ad4497ae2"
   integrity sha512-3YDiu347mtVtjpyV3u5kVqQLP242c06zwDOgpeRnybmXlYYsLbtTrUBUm8i8srONt+FWobl5aibnU1030PeeuA==
 
+axios-middleware@^0.3.1:
+  version "0.3.1"
+  resolved "https://registry.yarnpkg.com/axios-middleware/-/axios-middleware-0.3.1.tgz#2dd29ee5a821b2499be887e256d60872eb715542"
+  integrity sha512-DuPLxZgqBYnRgEhEUulNzPspf0j9jlH5iWOJHEfuLFfsxWLc7vjeOxR903dp+G+nrU3TYWbg2COLZ4PDUwh87g==
+
 axios@^0.19.2:
   version "0.19.2"
   resolved "https://registry.yarnpkg.com/axios/-/axios-0.19.2.tgz#3ea36c5d8818d0d5f8a8a97a6d36b86cdc00cb27"
