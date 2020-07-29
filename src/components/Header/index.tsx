@@ -2,7 +2,7 @@ import React from 'react';
 
 import { FaUser, FiPower } from 'react-icons/all';
 import { Container } from './styles';
-import { useAuth } from '../../context/AuthContext';
+import { useAuth } from '../../hooks/auth';
 
 const Header: React.FC = () => {
   const { signOut, user } = useAuth();

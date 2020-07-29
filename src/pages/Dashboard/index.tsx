@@ -3,9 +3,8 @@ import { MdCheck, MdClose, MdAdd, FiFilter } from 'react-icons/all';
 import produce from 'immer';
 import Select from 'react-select';
 
-import { useNavigation } from '../../context/NavigationContext';
-import { useSelection } from '../../context/SelectionContext';
-import { useTypes } from '../../context/TypesContext';
+import { useSelection } from '../../hooks/selection';
+import { useBase } from '../../hooks/base';
 import api from '../../services/api';
 
 import List from '../../components/List';
@@ -57,8 +56,7 @@ interface ParsedFilters {
 }
 
 const Dashboard: React.FC = () => {
-  const { tags, types, getTagName, getTypeName } = useTypes();
-  const { setPage } = useNavigation();
+  const { tags, types, getNameById } = useBase();
   const { isSelected, addToSelection, removeFromSelection } = useSelection();
 
   const [currentPage, setCurrentpage] = useState(1);
@@ -84,14 +82,13 @@ const Dashboard: React.FC = () => {
     }
   }, [addToSelection, isAllMarked, items, removeFromSelection]);
 
-  useEffect(() => setPage('dashboard'), [setPage]);
   const parsedFilters = useMemo(
     () =>
       filters.map(filter => ({
         ...filter,
-        name: getTagName(filter.id) || getTypeName(filter.id),
+        name: getNameById(filter.id),
       })),
-    [filters, getTagName, getTypeName],
+    [filters, getNameById],
   );
   const paramsGroupedFilters = useMemo(() => {
     const groupedFilters = filters.reduce((prev, curr) => {
@@ -156,7 +153,7 @@ const Dashboard: React.FC = () => {
   const handleOptionChange = useCallback(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (newOption: any) => {
-      console.log(newOption);
+      // console.log(newOption);
       setFilterOption(newOption);
       setFilterInputValue('');
       setFilterInputVisibility(newOption.value.needsMoreInput);

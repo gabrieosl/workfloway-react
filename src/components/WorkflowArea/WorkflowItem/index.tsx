@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import { useDrop, useDrag, DragSourceMonitor } from 'react-dnd';
 import { MdKeyboardArrowDown, MdRemoveCircle, GrDrag } from 'react-icons/all';
 
-import { useWorkflow } from '../../../context/WorkflowContext';
+import { useWorkflow } from '../../../hooks/WorkflowContext';
 import { Container } from './styles';
 
 type WorkflowItemProps = {

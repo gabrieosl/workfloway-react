@@ -1,7 +1,7 @@
 import React from 'react';
 import { BsPlayFill, FaStop } from 'react-icons/all';
 
-import { useWorkflow } from '../../context/WorkflowContext';
+import { useWorkflow } from '../../hooks/WorkflowContext';
 import WorkflowItem from './WorkflowItem';
 
 import { Container } from './styles';

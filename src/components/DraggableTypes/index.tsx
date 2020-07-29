@@ -1,12 +1,12 @@
 import React from 'react';
 
-import { useTypes } from '../../context/TypesContext';
+import { useBase } from '../../hooks/base';
 
 import Draggable from './Draggable';
 import { Container, ObservationTypesWrapper } from './styles';
 
 const DraggableTypes: React.FC = () => {
-  const { types } = useTypes();
+  const { types } = useBase();
 
   return (
     <Container>

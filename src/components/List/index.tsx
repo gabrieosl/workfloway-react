@@ -2,8 +2,8 @@ import React, { useCallback, useMemo } from 'react';
 import { GrEdit, MdCheck, MdClose } from 'react-icons/all';
 import { parseISO, formatDistance } from 'date-fns';
 
-import { useTypes } from '../../context/TypesContext';
-import { useSelection } from '../../context/SelectionContext';
+import { useBase } from '../../hooks/base';
+import { useSelection } from '../../hooks/selection';
 
 import { Container, Item } from './styles';
 
@@ -32,7 +32,7 @@ interface ListProps {
 
 const List: React.FC<ListProps> = ({ items, type = 'show', children }) => {
   const { toogleSelection, isSelected } = useSelection();
-  const { getTypeName, getTagName } = useTypes();
+  const { getNameById } = useBase();
 
   const isRemovable = useMemo(() => type === 'select', [type]);
 
@@ -63,7 +63,7 @@ const List: React.FC<ListProps> = ({ items, type = 'show', children }) => {
                     // })
                     .map(tag => (
                       <div className="tag">
-                        <strong>{getTagName(tag.tagId)}</strong>
+                        <strong>{getNameById(tag.tagId, 'tags')}</strong>
                         <small>{tag.value}</small>
                       </div>
                     ))}
@@ -71,7 +71,7 @@ const List: React.FC<ListProps> = ({ items, type = 'show', children }) => {
             </strong>
             <span>
               {item.lastObservation
-                ? getTypeName(item.lastObservation.type_id)
+                ? getNameById(item.lastObservation.type_id, 'types')
                 : '---'}
             </span>
             <small>

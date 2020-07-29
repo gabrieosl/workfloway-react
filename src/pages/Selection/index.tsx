@@ -6,8 +6,7 @@ import { toast } from 'react-toastify';
 
 import api from '../../services/api';
 
-import { useNavigation } from '../../context/NavigationContext';
-import { useSelection } from '../../context/SelectionContext';
+import { useSelection } from '../../hooks/selection';
 
 import List from '../../components/List';
 
@@ -19,13 +18,10 @@ interface SelectOptions {
 }
 
 const Selection: React.FC = () => {
-  const { setPage } = useNavigation();
   const { selection, setSelection, clearSelection } = useSelection();
   const [options, setOptions] = useState<SelectOptions[]>([]);
 
-  useEffect(() => setPage('selection'), [setPage]);
-
-  const isEmpty = useMemo(() => selection.content.length === 0, [selection]);
+  const isEmpty = useMemo(() => selection.subjectIds.length === 0, [selection]);
 
   const handleOptionChange = useCallback(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -83,7 +79,7 @@ const Selection: React.FC = () => {
       .post('/selections', {
         id: selection.id,
         name,
-        content: selection.content,
+        content: selection.subjectIds,
       })
       .then(() => {
         toast.success('Created');
@@ -129,7 +125,7 @@ const Selection: React.FC = () => {
           <FiTrash2 size={20} />
         </button>
       </SelectionPanel>
-      <List items={selection.content} type="select" />
+      <List items={selection.subjects} type="select" />
     </Container>
   );
 };

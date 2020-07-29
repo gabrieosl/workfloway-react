@@ -7,7 +7,7 @@ import Select from 'react-select';
 import { toast } from 'react-toastify';
 import api from '../../services/api';
 
-import { useTypes } from '../../context/TypesContext';
+import { useBase } from '../../hooks/base';
 
 import { Container } from './styles';
 
@@ -24,7 +24,7 @@ interface SelectOptions {
 }
 
 const CreateProduct: React.FC = () => {
-  const { tags, getTagId } = useTypes();
+  const { tags, getIdByName } = useBase();
 
   const [products, setProducts] = useState<ProductProps[]>([
     // { name: '', tags: {} },
@@ -78,7 +78,7 @@ const CreateProduct: React.FC = () => {
           columns.forEach((column, index) => {
             if (column === 'name') item.name = row[index];
             else {
-              const tagId = getTagId(column);
+              const tagId = getIdByName(column, 'tags');
               if (tagId) item.tags[tagId] = row[index];
               else console.log('TAG NOT FOUND');
             }
@@ -93,7 +93,7 @@ const CreateProduct: React.FC = () => {
 
       // console.log(reader.result);
     },
-    [getTagId],
+    [getIdByName],
   );
 
   const handleOptionChange = useCallback(

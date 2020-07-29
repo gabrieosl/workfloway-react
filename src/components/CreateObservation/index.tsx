@@ -6,8 +6,8 @@ import { MdAdd, FiSend, MdCancel } from 'react-icons/all';
 
 import api from '../../services/api';
 
-import { useSelection } from '../../context/SelectionContext';
-import { useTypes } from '../../context/TypesContext';
+import { useSelection } from '../../hooks/selection';
+import { useBase } from '../../hooks/base';
 
 import { FloatingButton, FloatingCard } from './styles';
 
@@ -23,8 +23,8 @@ interface CreateObservationProps {
 const CreateObservation: React.FC<CreateObservationProps> = ({
   initialTypeSelectedId = '',
 }) => {
-  const { selection } = useSelection();
-  const { types, getTypeName } = useTypes();
+  const { selectedSubjectIds } = useSelection();
+  const { types, getNameById } = useBase();
 
   const [showCard, setShowCard] = useState(false);
   const [selectedType, setSelectedType] = useState<SelectOptions>(
@@ -55,19 +55,16 @@ const CreateObservation: React.FC<CreateObservationProps> = ({
     setShowCard(!showCard);
   }, [showCard]);
 
-  const isAnySelected = useMemo(() => !!selection.content.length, [selection]);
+  const isAnySelected = useMemo(() => !!selectedSubjectIds.length, [
+    selectedSubjectIds,
+  ]);
 
   const handleSubmit = useCallback(async () => {
-    const listOfTargets = selection.content.reduce((all, currentItem) => {
-      all.push(currentItem.id);
-      return all;
-    }, [] as string[]);
-
     const params = {
       value,
       comment,
       type_id: selectedType.value,
-      subject_ids: listOfTargets,
+      subject_ids: selectedSubjectIds,
     };
     console.log(params);
 
@@ -78,17 +75,19 @@ const CreateObservation: React.FC<CreateObservationProps> = ({
     } else {
       toast.error('Error!');
     }
-  }, [comment, selectedType.value, selection, value]);
+  }, [comment, selectedSubjectIds, selectedType.value, value]);
 
-  const numberOfSelected = useMemo(() => selection.content.length, [selection]);
+  const numberOfSelected = useMemo(() => selectedSubjectIds.length, [
+    selectedSubjectIds,
+  ]);
 
   useEffect(() => {
     setSelectedType({
       value: initialTypeSelectedId || '',
       // TODO improve next line
-      label: getTypeName(initialTypeSelectedId) || 'Select type',
+      label: getNameById(initialTypeSelectedId, 'types') || 'Select type',
     });
-  }, [getTypeName, initialTypeSelectedId]);
+  }, [getNameById, initialTypeSelectedId]);
 
   return (
     <>
@@ -129,8 +128,8 @@ const CreateObservation: React.FC<CreateObservationProps> = ({
           <hr />
           <h3>{`To ${numberOfSelected} products`}</h3>
           <div>
-            {selection.content.map(item => (
-              <p>{item.name}</p>
+            {selectedSubjectIds.map(item => (
+              <p>{item}</p>
             ))}
           </div>
         </FloatingCard>

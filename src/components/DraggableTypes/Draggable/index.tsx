@@ -3,7 +3,7 @@ import { useDrag, DragSourceMonitor } from 'react-dnd';
 import { GrDrag } from 'react-icons/all';
 import { uuid } from 'uuidv4';
 
-import { useWorkflow } from '../../../context/WorkflowContext';
+import { useWorkflow } from '../../../hooks/WorkflowContext';
 
 import { Container } from './styles';
 

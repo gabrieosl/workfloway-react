@@ -4,8 +4,7 @@ import { toast } from 'react-toastify';
 
 import { FiSave, FiPlus, GrEdit } from 'react-icons/all';
 import produce from 'immer';
-import { useNavigation } from '../../context/NavigationContext';
-import { useWorkflow } from '../../context/WorkflowContext';
+import { useWorkflow } from '../../hooks/WorkflowContext';
 
 import WorkflowEditor from '../../components/WorkflowEditor';
 
@@ -18,11 +17,8 @@ interface SelectOptions {
 }
 
 const Workflows: React.FC = () => {
-  const { setPage } = useNavigation();
   const { workflow, setWorkflow } = useWorkflow();
   const [options, setOptions] = useState<SelectOptions[]>([]);
-
-  useEffect(() => setPage('workflows'), [setPage]);
 
   const canSave = useMemo(
     () => !!(workflow.edited && workflow.content.length),

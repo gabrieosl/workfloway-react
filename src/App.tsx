@@ -4,9 +4,7 @@ import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 
-import { AuthProvider } from './context/AuthContext';
-import { TypesProvider } from './context/TypesContext';
-import { SelectionProvider } from './context/SelectionContext';
+import Hooks from './hooks';
 import GlobalStyle from './styles/global';
 
 import Routes from './routes';
@@ -14,15 +12,11 @@ import Routes from './routes';
 const App: React.FC = () => {
   return (
     <>
-      <AuthProvider>
-        <TypesProvider>
-          <SelectionProvider>
-            <BrowserRouter>
-              <Routes />
-            </BrowserRouter>
-          </SelectionProvider>
-        </TypesProvider>
-      </AuthProvider>
+      <Hooks>
+        <BrowserRouter>
+          <Routes />
+        </BrowserRouter>
+      </Hooks>
       <GlobalStyle />
       <ToastContainer />
     </>

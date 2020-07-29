@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useRouteMatch } from 'react-router-dom';
 import {
   FiGrid,
   FiList,
@@ -8,47 +8,56 @@ import {
   BsGearFill,
 } from 'react-icons/all';
 
-import { useNavigation } from '../../context/NavigationContext';
-import { useSelection } from '../../context/SelectionContext';
+import { useSelection } from '../../hooks/selection';
 import { Container, Menu, Settings } from './styles';
 
 const Sider: React.FC = () => {
-  const { page } = useNavigation();
-  const { selection } = useSelection();
+  const { path } = useRouteMatch();
+
+  const { selectedSubjectIds } = useSelection();
+
   return (
     <Container>
       <Menu>
         <Link
           to="/dashboard"
-          className={`dashboard${page === 'dashboard' ? ' active' : ''}`}
+          className={`dashboard${
+            path.startsWith('/dashboard') ? ' active' : ''
+          }`}
         >
           <FiGrid />
         </Link>
         <Link
           to="/selection"
-          className={`selection${page === 'selection' ? ' active' : ''}`}
+          className={`selection${
+            path.startsWith('/selection') ? ' active' : ''
+          }`}
         >
           <FiList />
-          {!!selection.content.length && (
-            <span>{selection.content.length}</span>
+          {!!selectedSubjectIds.length && (
+            <span>{selectedSubjectIds.length}</span>
           )}
         </Link>
         <Link
           to="/workflows"
-          className={`workflows${page === 'workflows' ? ' active' : ''}`}
+          className={`workflows${
+            path.startsWith('/workflows') ? ' active' : ''
+          }`}
         >
           <IoIosGitNetwork />
         </Link>
         <Link
           to="/activities"
-          className={`activities${page === 'activities' ? ' active' : ''}`}
+          className={`activities${
+            path.startsWith('/activities') ? ' active' : ''
+          }`}
         >
           <MdHistory />
         </Link>
       </Menu>
       <Settings
         to="/settings"
-        className={`settings${page === 'settings' ? ' active' : ''}`}
+        className={`settings${path.startsWith('/settings') ? ' active' : ''}`}
       >
         <BsGearFill />
       </Settings>

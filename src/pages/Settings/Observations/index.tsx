@@ -8,7 +8,7 @@ import { toast } from 'react-toastify';
 
 import api from '../../../services/api';
 
-import { useTypes } from '../../../context/TypesContext';
+import { useBase } from '../../../hooks/base';
 
 import List from '../List';
 import CreateNewPopup from '../../../components/CreateNewPopup';
@@ -27,7 +27,7 @@ interface ObservationTypesProps {
 const ObservationTypess: React.FC = () => {
   const formRef = useRef<FormHandles>(null);
 
-  const { types, refreshTypes } = useTypes();
+  const { types, refreshData } = useBase();
 
   const handleSubmit = useCallback(
     async (data: SignInFormData) => {
@@ -41,13 +41,13 @@ const ObservationTypess: React.FC = () => {
           name: data.name,
         });
         toast.success('Criado');
-        refreshTypes();
+        refreshData('types');
       } catch (err) {
         toast.error(err);
       }
       window.location.reload();
     },
-    [refreshTypes],
+    [refreshData],
   );
 
   const handleDelete = useCallback(
@@ -57,9 +57,9 @@ const ObservationTypess: React.FC = () => {
           toast.success('Removido');
         }
       });
-      refreshTypes();
+      refreshData('types');
     },
-    [refreshTypes],
+    [refreshData],
   );
 
   const handleUpdate = useCallback(
@@ -67,11 +67,11 @@ const ObservationTypess: React.FC = () => {
       api.put(`types/${id}`, newData).then(response => {
         if (response.status === 200) {
           toast.success('Atualizado');
-          refreshTypes();
+          refreshData('types');
         }
       });
     },
-    [refreshTypes],
+    [refreshData],
   );
 
   return (
