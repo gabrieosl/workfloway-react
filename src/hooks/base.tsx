@@ -66,8 +66,8 @@ const BaseProvider: React.FC = ({ children }) => {
       channels.forEach(chann => {
         api.get(`/${chann}`).then(response => {
           if (response.status === 200) {
-            setData(
-              produce(data, draft => {
+            setData(prev =>
+              produce(prev, draft => {
                 draft[chann] = response.data;
                 return draft;
               }),
@@ -76,7 +76,7 @@ const BaseProvider: React.FC = ({ children }) => {
         });
       });
     },
-    [data, user],
+    [user],
   );
 
   useEffect(() => {

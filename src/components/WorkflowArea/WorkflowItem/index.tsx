@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import { useDrop, useDrag, DragSourceMonitor } from 'react-dnd';
 import { MdKeyboardArrowDown, MdRemoveCircle, GrDrag } from 'react-icons/all';
 
-import { useWorkflow } from '../../../hooks/WorkflowContext';
+import { useWorkflow } from '../../../hooks/workflow';
 import { Container } from './styles';
 
 type WorkflowItemProps = {
@@ -21,14 +21,14 @@ const WorkflowItem: React.FC<WorkflowItemProps> = ({
   isDropable = true,
   children,
 }) => {
-  const { updateItem, removeItem } = useWorkflow();
+  const { updateWorkflowItem, removeWorkflowItem } = useWorkflow();
 
   const [{ isDragging }, drag] = useDrag({
     item: { id, typeId, name, type: typeId ? 'OBSERVATION_TYPE' : 'OTHER' },
     end: (item, monitor: DragSourceMonitor) => {
       const dropResult = monitor.getDropResult();
       if (item && dropResult) {
-        updateItem(item, dropResult);
+        updateWorkflowItem(item, dropResult);
       }
     },
     collect: monitor => ({
@@ -66,7 +66,7 @@ const WorkflowItem: React.FC<WorkflowItemProps> = ({
             {children || <GrDrag className="drag-icon" size={15} />}
             {name}
             {isDraggable ? (
-              <button type="button" onClick={() => removeItem(id)}>
+              <button type="button" onClick={() => removeWorkflowItem(id)}>
                 <MdRemoveCircle />
               </button>
             ) : (

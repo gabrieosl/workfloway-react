@@ -5,71 +5,101 @@ interface WorkflowItemData {
   id: string;
   typeId?: string;
   name: string;
+  mustExistBeforeNext?: boolean;
 }
 
 interface WorkflowData {
   id?: string;
-  content: WorkflowItemData[];
-  edited: boolean;
   name?: string;
+  hasUnsavedChanges?: boolean;
+  content: WorkflowItemData[];
 }
 
 interface ContextData {
   workflow: WorkflowData;
-  setWorkflow(workflow: WorkflowData): void;
-  updateItem(item: WorkflowItemData, beforeItem: WorkflowItemData): void;
-  pushItem(item: WorkflowItemData, beforeItem: WorkflowItemData): void;
-  removeItem(id: string): void;
+  setWorkflow(newWorkflow: WorkflowData): void;
+  setWorkflowName(newName: string): void;
+  updateWorkflowItem(
+    item: WorkflowItemData,
+    beforeItem: WorkflowItemData,
+    mustExistBeforeNext?: boolean,
+  ): void;
+  pushWorkflowItem(
+    item: WorkflowItemData,
+    beforeItem: WorkflowItemData,
+    mustExistBeforeNext?: boolean,
+  ): void;
+  removeWorkflowItem(id: string): void;
+  clearWorkflow(): void;
 }
 
 const WorkflowContext = createContext<ContextData>({} as ContextData);
 
 const WorkflowProvider: React.FC = ({ children }) => {
   const [workflow, setWorkflow] = useState<WorkflowData>({
-    id: undefined,
-    name: undefined,
     content: [],
-    edited: false,
+    hasUnsavedChanges: false,
   });
 
-  const updateItem = useCallback(
-    (item, beforeItem) => {
+  const setWorkflowName = useCallback(
+    (newName: string) => {
+      setWorkflow(
+        produce(workflow, draft => {
+          draft.name = newName;
+          draft.hasUnsavedChanges = true;
+          return draft;
+        }),
+      );
+    },
+    [workflow],
+  );
+
+  const updateWorkflowItem = useCallback(
+    (item: WorkflowItemData, beforeItem: WorkflowItemData): void => {
       setWorkflow(
         produce(workflow, draft => {
           const itemIndex = draft.content.findIndex(wf => wf.id === item.id);
+          if (itemIndex < 0) return draft;
+
           draft.content.splice(itemIndex, 1);
-          draft.edited = true;
+          draft.hasUnsavedChanges = true;
           if (beforeItem.id === 'end') {
             draft.content.push(item);
-            return;
+            return draft;
           }
           const beforeItemIndex = draft.content.findIndex(
             wf => wf.id === beforeItem.id,
           );
           draft.content.splice(beforeItemIndex, 0, item);
+          return draft;
         }),
       );
     },
     [workflow],
   );
 
-  const removeItem = useCallback(
-    id => {
+  const removeWorkflowItem = useCallback(
+    (id: string) => {
       setWorkflow(
         produce(workflow, draft => {
           const itemIndex = draft.content.findIndex(wf => wf.id === id);
+          if (itemIndex < 0) return draft;
           draft.content.splice(itemIndex, 1);
-          draft.edited = true;
+          draft.hasUnsavedChanges = true;
+          return draft;
         }),
       );
     },
     [workflow],
   );
 
-  const pushItem = useCallback(
-    (item, beforeItem) => {
-      setWorkflow(
-        produce(workflow, draft => {
+  const pushWorkflowItem = useCallback(
+    (item: WorkflowItemData, beforeItem: WorkflowItemData) => {
+      console.log('item', item);
+      console.log('beforeItem', beforeItem);
+
+      setWorkflow(prev =>
+        produce(prev, draft => {
           const beforeItemIndex = draft.content.findIndex(
             wf => wf.id === beforeItem.id,
           );
@@ -80,21 +110,31 @@ const WorkflowProvider: React.FC = ({ children }) => {
           } else {
             draft.content.push(item);
           }
-          draft.edited = true;
+          draft.hasUnsavedChanges = true;
+          return draft;
         }),
       );
     },
-    [workflow],
+    [],
   );
+
+  const clearWorkflow = useCallback(() => {
+    setWorkflow({
+      content: [],
+      hasUnsavedChanges: false,
+    });
+  }, []);
 
   return (
     <WorkflowContext.Provider
       value={{
         workflow,
         setWorkflow,
-        updateItem,
-        pushItem,
-        removeItem,
+        setWorkflowName,
+        updateWorkflowItem,
+        pushWorkflowItem,
+        removeWorkflowItem,
+        clearWorkflow,
       }}
     >
       {children}
