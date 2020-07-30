@@ -9,7 +9,8 @@ import {
 } from 'react-icons/all';
 
 import { useSelection } from '../../hooks/selection';
-import { Container, Menu, Settings } from './styles';
+import CreateObservation from '../CreateObservation';
+import { Container } from './styles';
 
 const Sider: React.FC = () => {
   const { path } = useRouteMatch();
@@ -18,49 +19,48 @@ const Sider: React.FC = () => {
 
   return (
     <Container>
-      <Menu>
+      <nav>
         <Link
           to="/dashboard"
-          className={`dashboard${
-            path.startsWith('/dashboard') ? ' active' : ''
-          }`}
+          id="dashboard"
+          className={path.startsWith('/dashboard') ? ' active' : ''}
         >
           <FiGrid />
         </Link>
         <Link
           to="/selection"
-          className={`selection${
-            path.startsWith('/selection') ? ' active' : ''
-          }`}
+          id="selection"
+          className={path.startsWith('/selection') ? ' active' : ''}
         >
           <FiList />
           {!!selectedSubjectIds.length && (
             <span>{selectedSubjectIds.length}</span>
           )}
         </Link>
+        <CreateObservation />
         <Link
           to="/workflows"
-          className={`workflows${
-            path.startsWith('/workflows') ? ' active' : ''
-          }`}
+          id="workflows"
+          className={path.startsWith('/workflows') ? ' active' : ''}
         >
           <IoIosGitNetwork />
         </Link>
         <Link
           to="/activities"
-          className={`activities${
-            path.startsWith('/activities') ? ' active' : ''
-          }`}
+          id="activities"
+          className={path.startsWith('/activities') ? ' active' : ''}
         >
           <MdHistory />
         </Link>
-      </Menu>
-      <Settings
-        to="/settings"
-        className={`settings${path.startsWith('/settings') ? ' active' : ''}`}
-      >
-        <BsGearFill />
-      </Settings>
+        <div className="separator" />
+        <Link
+          to="/settings"
+          id="settings"
+          className={path.startsWith('/settings') ? ' active' : ''}
+        >
+          <BsGearFill />
+        </Link>
+      </nav>
     </Container>
   );
 };

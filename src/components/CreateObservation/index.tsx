@@ -9,7 +9,7 @@ import api from '../../services/api';
 import { useSelection } from '../../hooks/selection';
 import { useBase } from '../../hooks/base';
 
-import { FloatingButton, FloatingCard } from './styles';
+import { Container, FloatingCard } from './styles';
 
 interface SelectOptions {
   value?: string;
@@ -52,6 +52,7 @@ const CreateObservation: React.FC<CreateObservationProps> = ({
   }, []);
 
   const toogleShowCard = useCallback(() => {
+    // if (!selectedSubjectIds.length) return;
     setShowCard(!showCard);
   }, [showCard]);
 
@@ -91,16 +92,16 @@ const CreateObservation: React.FC<CreateObservationProps> = ({
 
   return (
     <>
-      <FloatingButton
-        onClick={showCard ? handleSubmit : toogleShowCard}
+      <Container
+        onClick={toogleShowCard}
         showCard={showCard}
         isAnySelected={isAnySelected}
       >
         {showCard ? <FiSend /> : <MdAdd />}
         {!showCard && numberOfSelected > 0 && <span>{numberOfSelected}</span>}
-      </FloatingButton>
+      </Container>
       {showCard && (
-        <FloatingCard>
+        <FloatingCard showCard={showCard}>
           <aside>
             <h2>Add Observation</h2>
             <button type="button" onClick={toogleShowCard}>

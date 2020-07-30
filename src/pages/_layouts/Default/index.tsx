@@ -10,8 +10,8 @@ const Default: React.FC = ({ children }) => {
       <Sider />
       <Main>
         <Header />
-        {children}
-        {/* <div className="example" /> */}
+        {/* {children} */}
+        <div className="example" />
       </Main>
     </Container>
   );

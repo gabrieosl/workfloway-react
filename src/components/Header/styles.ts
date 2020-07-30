@@ -10,6 +10,10 @@ export const Container = styled.header`
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   z-index: 10;
 
+  @media all and (max-width: 500px) {
+    display: none;
+  }
+
   > strong {
     margin-left: 20px;
     font-size: 24px;
