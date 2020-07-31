@@ -17,7 +17,7 @@ export const Container = styled.header<ContainerProps>`
   align-items: center;
   justify-content: space-between;
   height: 50px;
-  margin: 0 20px;
+  padding: 0 20px;
   flex-shrink: 0;
   /* box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.3); */
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
@@ -36,7 +36,7 @@ export const Container = styled.header<ContainerProps>`
 
     overflow: hidden;
 
-    @media all and (max-width: 500px) {
+    @media all and (max-width: 768px) {
       ${props =>
         !props.showProfile &&
         css`
@@ -56,7 +56,7 @@ export const Container = styled.header<ContainerProps>`
       &#logout {
         background: #333;
 
-        @media all and (min-width: 501px) {
+        @media all and (min-width: 769px) {
           box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.3);
         }
       }
@@ -72,7 +72,7 @@ export const Container = styled.header<ContainerProps>`
           }
         }
 
-        @media all and (max-width: 500px) {
+        @media all and (max-width: 768px) {
           svg:first-child {
             display: ${props => (props.showProfile ? 'none' : 'block')};
           }

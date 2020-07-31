@@ -12,9 +12,8 @@ export const Container = styled.div`
   background: #067bc2;
   padding-top: 60px;
 
-  @media all and (max-width: 500px) {
+  @media all and (max-width: 768px) {
     flex-direction: row;
-    position: absolute;
     height: 60px;
     width: 100vw;
     padding: 0;
@@ -27,7 +26,7 @@ export const Container = styled.div`
     flex-direction: column;
     flex: 1;
 
-    @media all and (max-width: 500px) {
+    @media all and (max-width: 768px) {
       justify-content: space-around;
       flex-direction: row;
       height: 100%;
@@ -50,7 +49,7 @@ export const Container = styled.div`
       transition: all 0.2s;
     }
 
-    @media all and (max-width: 500px) {
+    @media all and (max-width: 768px) {
       opacity: 0.7;
 
       &.active {
@@ -64,9 +63,14 @@ export const Container = styled.div`
       &#workflows {
         display: none;
       }
+
+      &#selection span {
+        display: none;
+      }
     }
 
-    @media all and (min-width: 501px) {
+    @media all and (min-width: 769px) {
+      position: relative;
       width: 50px;
       height: 50px;
       margin-bottom: 10px;
@@ -137,7 +141,7 @@ export const Container = styled.div`
 
   div.separator {
     flex: 1;
-    @media all and (max-width: 500px) {
+    @media all and (max-width: 768px) {
       display: none;
     }
   }

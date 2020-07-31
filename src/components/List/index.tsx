@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo } from 'react';
-import { GrEdit, MdCheck, MdClose } from 'react-icons/all';
+import { GrEdit, MdCheck, MdClose, MdAdd } from 'react-icons/all';
 import { parseISO, formatDistance } from 'date-fns';
 
 import { useBase } from '../../hooks/base';
@@ -28,9 +28,10 @@ interface ItemData {
 interface ListProps {
   items: ItemData[];
   type?: 'show' | 'select';
+  loadMoreItems?: () => void;
 }
 
-const List: React.FC<ListProps> = ({ items, type = 'show', children }) => {
+const List: React.FC<ListProps> = ({ items, loadMoreItems, type = 'show' }) => {
   const { toogleSelection, isSelected } = useSelection();
   const { getNameById } = useBase();
 
@@ -98,7 +99,11 @@ const List: React.FC<ListProps> = ({ items, type = 'show', children }) => {
           <h1>Empty</h1>
         </section>
       )}
-      {children}
+      {loadMoreItems && (
+        <button type="button" className="load-more" onClick={loadMoreItems}>
+          <MdAdd />
+        </button>
+      )}
     </Container>
   );
 };

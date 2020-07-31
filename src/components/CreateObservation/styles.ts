@@ -37,7 +37,7 @@ export const Container = styled.button<ContainerProps>`
   color: #fff;
   background: #18b079;
 
-  @media all and (min-width: 501px) {
+  @media all and (min-width: 769px) {
     display: ${props => (props.showCard ? 'none' : ' flex')};
     position: absolute;
     height: 80px;
@@ -107,7 +107,7 @@ export const FloatingCard = styled.div<FloatingCardProps>`
   border-radius: 12px 12px 0 0;
   box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.5);
 
-  @media all and (min-width: 501px) {
+  @media all and (min-width: 769px) {
     max-width: 380px;
     margin: 18px;
     border-radius: 12px;

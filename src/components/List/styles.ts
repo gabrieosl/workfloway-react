@@ -5,13 +5,39 @@ export const Container = styled.main`
 
   display: flex;
   flex-direction: column;
-  background: #fff;
-  border-radius: 10px;
-  margin-top: 5px;
+  background: #f7f7f7;
+  border-radius: 3px;
+  margin-top: 15px;
 
   overflow-y: auto;
   padding: 10px;
-  box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.4);
+  box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.7);
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100px;
+    pointer-events: none;
+    z-index: 20;
+
+    border-radius: 3px;
+    background: linear-gradient(
+      0,
+      #f7f7f7,
+      #f7f7f7ee,
+      #f7f7f7aa,
+      #f7f7f755,
+      #f7f7f700
+    );
+  }
+
+  &::-webkit-scrollbar {
+    width: 0px;
+    background: transparent; /* make scrollbar transparent */
+  }
 
   > button {
     align-self: center;

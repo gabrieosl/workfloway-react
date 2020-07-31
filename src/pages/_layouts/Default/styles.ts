@@ -26,6 +26,7 @@ export const PageComponent = styled.div`
   display: flex;
   margin: 0;
   padding: 0;
+  overflow: hidden;
 
   @media all and (min-width: 500px) and (max-width: 768px) {
     padding: 20px;
