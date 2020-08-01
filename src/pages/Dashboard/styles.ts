@@ -68,22 +68,23 @@ interface SelectionPanelProps {
 }
 
 export const SelectionPanel = styled.div<SelectionPanelProps>`
+  position: relative;
   display: flex;
   flex-direction: row;
   align-items: center;
   margin: 5px;
+  transition: height 1s;
 
   @media all and (min-width: 769px) {
     flex-direction: row;
   }
 
-
   button.select-all {
     align-self: flex-end;
     background: ${props => (!props.areAllSubjectsMarked ? '#ddd' : '#fac748')};
     border-radius: 50%;
-    width: 40px;
-    height: 40px;
+    width: 36px;
+    height: 36px;
     color: #bbb;
 
     svg + svg {
@@ -91,36 +92,11 @@ export const SelectionPanel = styled.div<SelectionPanelProps>`
       opacity: 0.7;
       transform: translateX(4px) translateY(1px);
     }
-  }
 
-
-  section {
-
-
-  button.lala {
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    margin: 0 8px;
-    height: 36px;
-
-    border: 0;
-    border-radius: 5px;
-    color: #fff;
-    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.4);
-
-    &:hover {
-      box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.4);
+    @media all and (max-width: 768px) {
+      position: absolute;
+      right: 0;
+      top: 0;
     }
-
-    &.new {
-      background: #006600;
-      font-weight: bold;
-      padding: 0 10px;
-    }
-
-
   }
 `;

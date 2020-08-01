@@ -1,11 +1,12 @@
 import React from 'react';
 import {
-  Switch /* , Route as ReactDOMRoute, Redirect */,
+  Switch,
+  Route as ReactDOMRoute /* ,  Redirect */,
 } from 'react-router-dom';
 
 import Route from './Route';
 
-// import SignIn from '../pages/SignIn';
+import SignIn from '../pages/SignIn';
 
 import Dashboard from '../pages/Dashboard';
 // import Selection from '../pages/Selection';
@@ -19,9 +20,9 @@ const routes: React.FC = () => {
       <Route path="/dashboard" component={Dashboard} isPrivate />
       <Route path="/settings" component={Settings} isPrivate />
       <Route path="/workflows" component={Workflows} isPrivate />
+      <ReactDOMRoute path="/signin" exact component={SignIn} />
       {/* <Route path="/selection" component={Selection} isPrivate />
       <Route path="/activities" component={Activities} isPrivate />
-      <ReactDOMRoute path="/signin" exact component={SignIn} />
       <ReactDOMRoute
       path="/"
       exact

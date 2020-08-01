@@ -2,6 +2,7 @@ import React, { useEffect, useState, useCallback, useMemo } from 'react';
 import { MdCheck, MdAdd } from 'react-icons/all';
 import produce from 'immer';
 
+import { classNames } from 'react-select/src/utils';
 import { useSelection } from '../../hooks/selection';
 import api from '../../services/api';
 
@@ -37,15 +38,37 @@ const Dashboard: React.FC = () => {
   const [subjectsPerPage] = useState(15);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const getData = useCallback(async (): Promise<any> => {
-    const response = await api.get(`/subjects?`, {
-      params: {
-        ...parsedFilters,
-        page: subjectsPage,
-        size: subjectsPerPage,
-      },
-    });
-    return response.data;
+  const refreshData = useCallback(() => {
+    api
+      .get(`/subjects?`, {
+        params: {
+          ...parsedFilters,
+          page: subjectsPage,
+          size: subjectsPerPage,
+        },
+      })
+      .then(response => setSubjects(response.data));
+  }, [parsedFilters, subjectsPage, subjectsPerPage]);
+
+  const appendMoreData = useCallback(() => {
+    console.log('called');
+    api
+      .get(`/subjects?`, {
+        params: {
+          ...parsedFilters,
+          page: subjectsPage,
+          size: subjectsPerPage,
+        },
+      })
+      .then(response =>
+        setSubjects(prev =>
+          produce(prev, draft => {
+            draft = draft.concat(response.data);
+            return draft;
+          }),
+        ),
+      );
+    setSubjectsPage(prev => prev + 1);
   }, [parsedFilters, subjectsPage, subjectsPerPage]);
 
   const areAllSubjectsMarked = useMemo(
@@ -61,21 +84,8 @@ const Dashboard: React.FC = () => {
     }
   }, [addToSelection, areAllSubjectsMarked, subjects, removeFromSelection]);
 
-  const handleLoadMoreItems = useCallback(async () => {
-    const data = await getData();
-    setSubjects(prev =>
-      produce(prev, draft => {
-        draft.push(data);
-        return draft;
-      }),
-    );
-    setSubjectsPage(prev => prev + 1);
-  }, [getData]);
-
   useEffect(() => {
-    setSubjects([]);
-    setSubjectsPage(1);
-    handleLoadMoreItems();
+    refreshData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [parsedFilters]);
 
@@ -99,7 +109,7 @@ const Dashboard: React.FC = () => {
           <MdCheck size={25} />
         </button>
       </SelectionPanel>
-      <List items={subjects} loadMoreItems={handleLoadMoreItems} />
+      <List items={subjects} loadMoreItems={appendMoreData} />
     </Container>
   );
 };
