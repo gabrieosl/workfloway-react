@@ -1,13 +1,13 @@
-import styled, { keyframes, css } from 'styled-components';
+import styled, { css } from 'styled-components';
 
-const appearFromRight = keyframes`
-  from {
-    transform: translateX(100%);
-  }
-  to {
-    transform: translateX(0);
-  }
-`;
+// const appearFromRight = keyframes`
+//   from {
+//     transform: translateX(100%);
+//   }
+//   to {
+//     transform: translateX(0);
+//   }
+// `;
 interface ContainerProps {
   showProfile: boolean;
 }

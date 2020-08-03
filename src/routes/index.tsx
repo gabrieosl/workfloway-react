@@ -1,17 +1,14 @@
 import React from 'react';
-import {
-  Switch,
-  Route as ReactDOMRoute /* ,  Redirect */,
-} from 'react-router-dom';
+import { Switch, Route as ReactDOMRoute, Redirect } from 'react-router-dom';
 
 import Route from './Route';
 
 import SignIn from '../pages/SignIn';
 
 import Dashboard from '../pages/Dashboard';
-// import Selection from '../pages/Selection';
+import Selection from '../pages/Selection';
 import Workflows from '../pages/Workflows';
-// import Activities from '../pages/Activities';
+import Activities from '../pages/Activities';
 import Settings from '../pages/Settings';
 
 const routes: React.FC = () => {
@@ -21,14 +18,14 @@ const routes: React.FC = () => {
       <Route path="/settings" component={Settings} isPrivate />
       <Route path="/workflows" component={Workflows} isPrivate />
       <ReactDOMRoute path="/signin" exact component={SignIn} />
-      {/* <Route path="/selection" component={Selection} isPrivate />
+      <Route path="/selection" component={Selection} isPrivate />
       <Route path="/activities" component={Activities} isPrivate />
       <ReactDOMRoute
-      path="/"
-      exact
+        path="/"
+        exact
         render={() => <Redirect to={{ pathname: '/dashboard' }} />}
       />
-      <ReactDOMRoute path="/" component={() => <h1>404</h1>} /> */}
+      <ReactDOMRoute path="/" component={() => <h1>404</h1>} />
     </Switch>
   );
 };

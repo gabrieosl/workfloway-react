@@ -23,6 +23,7 @@ const appear = keyframes`
 interface ContainerProps {
   showCard: boolean;
   isAnySelected?: boolean;
+  showSelfWhenFloating?: boolean;
 }
 
 export const Container = styled.button<ContainerProps>`
@@ -38,7 +39,8 @@ export const Container = styled.button<ContainerProps>`
   background: #18b079;
 
   @media all and (min-width: 769px) {
-    display: ${props => (props.showCard ? 'none' : ' flex')};
+    display: ${props =>
+      props.showCard || !props.showSelfWhenFloating ? 'none' : ' flex'};
     position: absolute;
     height: 80px;
     width: 80px;
@@ -146,5 +148,14 @@ export const FloatingCard = styled.div<FloatingCardProps>`
 
   hr {
     margin: 8px 0;
+  }
+
+  button.submit-observation {
+    margin-top: 5px;
+    height: 28px;
+    background: #006600;
+    border-radius: 5px;
+    border: 0;
+    color: #fff;
   }
 `;

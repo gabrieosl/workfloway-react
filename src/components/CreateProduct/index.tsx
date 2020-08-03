@@ -23,7 +23,15 @@ interface SelectOptions {
   label: string;
 }
 
-const CreateProduct: React.FC = () => {
+interface CreateProductProps {
+  onClose(value: boolean): void;
+  refreshData(): void;
+}
+
+const CreateProduct: React.FC<CreateProductProps> = ({
+  onClose,
+  refreshData,
+}) => {
   const { tags, getIdByName } = useBase();
 
   const [products, setProducts] = useState<ProductProps[]>([
@@ -80,7 +88,6 @@ const CreateProduct: React.FC = () => {
             else {
               const tagId = getIdByName(column, 'tags');
               if (tagId) item.tags[tagId] = row[index];
-              else console.log('TAG NOT FOUND');
             }
           });
 
@@ -99,29 +106,26 @@ const CreateProduct: React.FC = () => {
   const handleOptionChange = useCallback(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (newOption: any) => {
-      console.log(newOption);
       setSelectedOption(newOption);
     },
     [],
   );
 
   const handleSubmit = useCallback(() => {
-    console.log('POST /subjects ', {
-      items: products,
-      workflow_id: selectedOption.value,
-    });
     api
       .post('/subjects', { items: products, workflow_id: selectedOption.value })
       .then(response => {
         if (response.status === 201) {
           toast.success('Created!');
           // window.location.reload(false);
+          onClose(false);
+          refreshData();
         }
       })
-      .catch(err => {
+      .catch(() => {
         toast.error('Error!');
       });
-  }, [products, selectedOption.value]);
+  }, [onClose, products, refreshData, selectedOption.value]);
 
   useEffect(() => {
     api.get('/workflows').then(response => {
@@ -193,12 +197,7 @@ const CreateProduct: React.FC = () => {
               ))}
             </tbody>
           </table>
-          <button
-            id="bt"
-            className="new-line"
-            type="button"
-            onClick={appendProduct}
-          >
+          <button id="new-line" type="button" onClick={appendProduct}>
             <MdAdd />
             New Line
           </button>
@@ -228,12 +227,7 @@ const CreateProduct: React.FC = () => {
             onChange={handleOptionChange}
             value={selectedOption}
           />
-          <button
-            id="bt"
-            className="create"
-            type="button"
-            onClick={handleSubmit}
-          >
+          <button id="create" type="button" onClick={handleSubmit}>
             <MdCheck />
             Confirm
           </button>

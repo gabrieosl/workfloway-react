@@ -1,4 +1,5 @@
 import React, { useMemo, useState, useCallback, useEffect } from 'react';
+import { useRouteMatch } from 'react-router-dom';
 import Select from 'react-select';
 import { toast } from 'react-toastify';
 
@@ -25,6 +26,7 @@ const CreateObservation: React.FC<CreateObservationProps> = ({
 }) => {
   const { selectedSubjectIds } = useSelection();
   const { types, getNameById } = useBase();
+  const { path } = useRouteMatch();
 
   const [showCard, setShowCard] = useState(false);
   const [selectedType, setSelectedType] = useState<SelectOptions>(
@@ -33,13 +35,15 @@ const CreateObservation: React.FC<CreateObservationProps> = ({
   const [value, setValue] = useState('');
   const [comment, setComment] = useState('');
 
+  const showSelfWhenFloating = useMemo(() => path === '/dashboard', [path]);
+
   const options = useMemo<SelectOptions[]>(() => {
-    return types.reduce((all, current) => {
-      all.push({ value: current.id, label: current.name });
-      return all;
-    }, [] as SelectOptions[]);
+    return types.map(type => {
+      return { value: type.id, label: type.name };
+    });
   }, [types]);
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleOptionChange = useCallback((newOption: any) => {
     setSelectedType(newOption);
   }, []);
@@ -47,16 +51,20 @@ const CreateObservation: React.FC<CreateObservationProps> = ({
   const handleObsValueChange = useCallback(e => {
     setValue(e.target.value);
   }, []);
+
   const handleObsCommentChange = useCallback(e => {
     setComment(e.target.value);
   }, []);
 
   const toogleShowCard = useCallback(() => {
-    // if (!selectedSubjectIds.length) return;
     setShowCard(!showCard);
   }, [showCard]);
 
   const isAnySelected = useMemo(() => !!selectedSubjectIds.length, [
+    selectedSubjectIds,
+  ]);
+
+  const numberOfSelected = useMemo(() => selectedSubjectIds.length, [
     selectedSubjectIds,
   ]);
 
@@ -67,7 +75,6 @@ const CreateObservation: React.FC<CreateObservationProps> = ({
       type_id: selectedType.value,
       subject_ids: selectedSubjectIds,
     };
-    console.log(params);
 
     const response = await api.post('/observations', params);
     if (response.status === 201) {
@@ -77,10 +84,6 @@ const CreateObservation: React.FC<CreateObservationProps> = ({
       toast.error('Error!');
     }
   }, [comment, selectedSubjectIds, selectedType.value, value]);
-
-  const numberOfSelected = useMemo(() => selectedSubjectIds.length, [
-    selectedSubjectIds,
-  ]);
 
   useEffect(() => {
     setSelectedType({
@@ -96,6 +99,7 @@ const CreateObservation: React.FC<CreateObservationProps> = ({
         onClick={toogleShowCard}
         showCard={showCard}
         isAnySelected={isAnySelected}
+        showSelfWhenFloating={showSelfWhenFloating}
       >
         {showCard ? <FiSend /> : <MdAdd />}
         {!showCard && numberOfSelected > 0 && <span>{numberOfSelected}</span>}
@@ -128,11 +132,14 @@ const CreateObservation: React.FC<CreateObservationProps> = ({
           <section />
           <hr />
           <h3>{`To ${numberOfSelected} products`}</h3>
-          <div>
-            {selectedSubjectIds.map(item => (
-              <p>{item}</p>
-            ))}
-          </div>
+          <button
+            type="button"
+            className="submit-observation"
+            onClick={handleSubmit}
+          >
+            <MdAdd />
+            Add
+          </button>
         </FloatingCard>
       )}
     </>

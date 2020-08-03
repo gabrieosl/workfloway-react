@@ -1,19 +1,18 @@
 import axios from 'axios';
 
 const api = axios.create({
-  // baseURL: process.env.API_BACKEND_URL,
-  baseURL: 'https://api.workfloway.com',
+  baseURL: process.env.REACT_APP_API_BACKEND_URL,
 });
 
 api.interceptors.request.use(
   config => {
     // Do something before request is sent
-    console.log(config);
-    console.log('request');
+    // console.log(config);
+    // console.log('request');
     return config;
   },
   error => {
-    console.log('request error');
+    // console.log('request error');
     // Do something with request error
     return Promise.reject(error);
   },
@@ -21,13 +20,13 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   response => {
     // Do something with response data
-    console.log('response');
+    // console.log('response');
 
     return response;
   },
   error => {
     // Do something with response error
-    console.log('response error');
+    // console.log('response error');
     // localStorage.removeItem('@Workfloway:token');
     // localStorage.removeItem('@Workfloway:user');
     // window.location.reload();

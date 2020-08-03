@@ -6,7 +6,6 @@ import {
   FiFilter,
   MdKeyboardArrowDown,
   MdKeyboardArrowUp,
-  MdKeyboardArrowRight,
   MdAdd,
   FiTrash,
 } from 'react-icons/all';

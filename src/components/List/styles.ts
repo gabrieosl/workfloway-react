@@ -5,15 +5,16 @@ export const Container = styled.main`
 
   display: flex;
   flex-direction: column;
+  max-width: 100%;
   background: #f7f7f7;
   border-radius: 3px;
   margin-top: 15px;
 
   overflow-y: auto;
-  padding: 10px;
+  overflow-x: hidden;
   box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.7);
 
-  &::after {
+  /* &::after {
     content: '';
     position: absolute;
     bottom: 0;
@@ -32,7 +33,7 @@ export const Container = styled.main`
       #f7f7f755,
       #f7f7f700
     );
-  }
+  } */
 
   &::-webkit-scrollbar {
     width: 0px;
@@ -57,6 +58,19 @@ export const Container = styled.main`
     align-items: center;
     justify-content: center;
   }
+
+  div.item-details {
+    display: flex;
+    flex-direction: column;
+    margin: 10px;
+  }
+
+  div.item-details-observation {
+    display: flex;
+    p {
+      margin: 0 5px;
+    }
+  }
 `;
 
 interface ItemProps {
@@ -69,9 +83,9 @@ export const Item = styled.div<ItemProps>`
   justify-content: space-between;
   align-items: center;
 
-  margin: 3px 0;
-  padding: 10px 15px;
-  border-radius: 10px;
+  padding: 40px 15px;
+  border-radius: 0;
+  border-bottom: 1px solid #aaa;
   background: ${props => (props.selected ? '#FEF3D7' : 'none')};
 
   &:hover {
@@ -86,7 +100,7 @@ export const Item = styled.div<ItemProps>`
   }
 
   div.tags-holder {
-    display: flex;
+    display: none;
     flex-direction: row;
     /* align-self: flex-end; */
 
@@ -186,5 +200,17 @@ export const Item = styled.div<ItemProps>`
 
   &:last-child {
     margin-bottom: 100px;
+    border-bottom: 0;
+  }
+
+  @media all and (min-width: 769px) {
+    padding: 10px 15px;
+    border-radius: 10px;
+    border-bottom: 0;
+    margin: 3px 0;
+
+    div.tags-holder {
+      display: flex;
+    }
   }
 `;

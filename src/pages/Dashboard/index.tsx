@@ -2,25 +2,31 @@ import React, { useEffect, useState, useCallback, useMemo } from 'react';
 import { MdCheck, MdAdd } from 'react-icons/all';
 import produce from 'immer';
 
-import { classNames } from 'react-select/src/utils';
 import { useSelection } from '../../hooks/selection';
 import api from '../../services/api';
 
 import FilterCreator from '../../components/FilterCreator';
 import List from '../../components/List';
+import Popup from '../../components/Popup';
+import CreateProduct from '../../components/CreateProduct';
 
 import { Container, SelectionPanel } from './styles';
+
+interface ObservationData {
+  type_id: string;
+  created_at: Date;
+  comment: string;
+  value: string;
+  user: {
+    name: string;
+  };
+}
 
 interface SubjectData {
   id: string;
   name: string;
-  lastObservation?: {
-    type_id: string;
-    created_at: Date;
-    user: {
-      name: string;
-    };
-  };
+  observations: ObservationData[];
+  lastObservation?: ObservationData;
   lastSubmission?: {
     repetition: number;
   };
@@ -36,8 +42,8 @@ const Dashboard: React.FC = () => {
   const [parsedFilters, setParsedFilters] = useState({});
   const [subjectsPage, setSubjectsPage] = useState(1);
   const [subjectsPerPage] = useState(15);
+  const [showCreateProductPopup, setShowCreateProductPopup] = useState(false);
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const refreshData = useCallback(() => {
     api
       .get(`/subjects?`, {
@@ -93,10 +99,22 @@ const Dashboard: React.FC = () => {
     <Container>
       <div className="title-holder">
         <strong className="title-text">List of Products</strong>
-        <button type="button" className="create-new">
+        <button
+          type="button"
+          className="create-new"
+          onClick={() => setShowCreateProductPopup(true)}
+        >
           <MdAdd />
           <span>New Product</span>
         </button>
+        {showCreateProductPopup && (
+          <Popup onClose={setShowCreateProductPopup}>
+            <CreateProduct
+              onClose={setShowCreateProductPopup}
+              refreshData={refreshData}
+            />
+          </Popup>
+        )}
       </div>
       <SelectionPanel areAllSubjectsMarked={areAllSubjectsMarked}>
         <FilterCreator setParsedFilters={setParsedFilters} />

@@ -1,16 +1,21 @@
 import React, { useState, createContext, useContext, useCallback } from 'react';
 import produce from 'immer';
 
+interface ObservationData {
+  type_id: string;
+  created_at: Date;
+  comment: string;
+  value: string;
+  user: {
+    name: string;
+  };
+}
+
 interface SubjectData {
   id: string;
   name: string;
-  lastObservation?: {
-    type_id: string;
-    created_at: Date;
-    user: {
-      name: string;
-    };
-  };
+  observations: ObservationData[];
+  lastObservation?: ObservationData;
   lastSubmission?: {
     repetition: number;
   };
@@ -68,8 +73,8 @@ const SelectionProvider: React.FC = ({ children }) => {
 
   const addToSelection = useCallback(
     (newItems: SubjectData[]): void => {
-      setData(
-        produce(data, draft => {
+      setData(prev =>
+        produce(prev, draft => {
           newItems.forEach(newItem => {
             if (!isSelected(newItem.id)) {
               draft.subjectIds.push(newItem.id);
@@ -81,13 +86,13 @@ const SelectionProvider: React.FC = ({ children }) => {
         }),
       );
     },
-    [data, isSelected],
+    [isSelected],
   );
 
   const removeFromSelection = useCallback(
     (itemsToRemove: SubjectData[]): void => {
-      setData(
-        produce(data, draft => {
+      setData(prev =>
+        produce(prev, draft => {
           itemsToRemove.forEach(itemToRemove => {
             const index = getSubjectIdIndex(itemToRemove.id);
             if (index >= 0) {
@@ -97,19 +102,18 @@ const SelectionProvider: React.FC = ({ children }) => {
               );
               draft.edited = true;
             }
-            return draft;
           });
           return draft;
         }),
       );
     },
-    [data, getSubjectIdIndex],
+    [getSubjectIdIndex],
   );
 
   const toogleSelection = useCallback(
     (item: SubjectData): void => {
-      setData(
-        produce(data, draft => {
+      setData(prev =>
+        produce(prev, draft => {
           const index = getSubjectIdIndex(item.id);
           if (index >= 0) {
             draft.subjectIds.splice(index, 1);
@@ -125,7 +129,7 @@ const SelectionProvider: React.FC = ({ children }) => {
         }),
       );
     },
-    [data, getSubjectIdIndex],
+    [getSubjectIdIndex],
   );
 
   const clearSelection = useCallback(() => {

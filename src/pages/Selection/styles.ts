@@ -7,7 +7,7 @@ export const Container = styled.div`
   flex: 1;
 
   padding: 40px;
-  background: #fcf8ef;
+  background: none;
 `;
 
 interface SelectionPanelProps {

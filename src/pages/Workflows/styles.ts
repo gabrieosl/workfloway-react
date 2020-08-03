@@ -7,7 +7,7 @@ export const Container = styled.div`
   flex-direction: column;
 
   padding: 40px;
-  background: #dedede;
+  background: none;
   overflow-y: hidden;
 `;
 

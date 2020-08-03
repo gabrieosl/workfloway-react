@@ -14,23 +14,23 @@ interface FilterData {
   value?: string;
 }
 
-const AVAILABLE_FILTERS = [
-  {
-    type: 'name',
-    hasOptions: false,
-    hasValue: true,
-  },
-  {
-    type: 'tags',
-    hasOptions: true,
-    hasValue: true,
-  },
-  {
-    type: 'state',
-    hasOptions: true,
-    hasValue: false,
-  },
-];
+// const AVAILABLE_FILTERS = [
+//   {
+//     type: 'name',
+//     hasOptions: false,
+//     hasValue: true,
+//   },
+//   {
+//     type: 'tags',
+//     hasOptions: true,
+//     hasValue: true,
+//   },
+//   {
+//     type: 'state',
+//     hasOptions: true,
+//     hasValue: false,
+//   },
+// ];
 
 interface GroupedFilters {
   [key: string]: string[];
