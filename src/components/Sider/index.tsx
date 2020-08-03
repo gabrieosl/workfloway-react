@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useRouteMatch } from 'react-router-dom';
 import {
   FiGrid,
   FiList,
@@ -8,48 +8,59 @@ import {
   BsGearFill,
 } from 'react-icons/all';
 
-import { useNavigation } from '../../context/NavigationContext';
-import { useSelection } from '../../context/SelectionContext';
-import { Container, Menu, Settings } from './styles';
+import { useSelection } from '../../hooks/selection';
+import CreateObservation from '../CreateObservation';
+import { Container } from './styles';
 
 const Sider: React.FC = () => {
-  const { page } = useNavigation();
-  const { selection } = useSelection();
+  const { path } = useRouteMatch();
+
+  const { selectedSubjectIds } = useSelection();
+
   return (
     <Container>
-      <Menu>
+      <nav>
         <Link
           to="/dashboard"
-          className={`dashboard${page === 'dashboard' ? ' active' : ''}`}
+          id="dashboard"
+          className={path.startsWith('/dashboard') ? ' active' : ''}
         >
           <FiGrid />
         </Link>
         <Link
           to="/selection"
-          className={`selection${page === 'selection' ? ' active' : ''}`}
+          id="selection"
+          className={path.startsWith('/selection') ? ' active' : ''}
         >
           <FiList />
-          {!!selection.length && <span>{selection.length}</span>}
+          {!!selectedSubjectIds.length && (
+            <span>{selectedSubjectIds.length}</span>
+          )}
         </Link>
+        <CreateObservation />
         <Link
           to="/workflows"
-          className={`workflows${page === 'workflows' ? ' active' : ''}`}
+          id="workflows"
+          className={path.startsWith('/workflows') ? ' active' : ''}
         >
           <IoIosGitNetwork />
         </Link>
         <Link
           to="/activities"
-          className={`activities${page === 'activities' ? ' active' : ''}`}
+          id="activities"
+          className={path.startsWith('/activities') ? ' active' : ''}
         >
           <MdHistory />
         </Link>
-      </Menu>
-      <Settings
-        to="/settings"
-        className={`settings${page === 'settings' ? ' active' : ''}`}
-      >
-        <BsGearFill />
-      </Settings>
+        <div className="separator" />
+        <Link
+          to="/settings"
+          id="settings"
+          className={path.startsWith('/settings') ? ' active' : ''}
+        >
+          <BsGearFill />
+        </Link>
+      </nav>
     </Container>
   );
 };

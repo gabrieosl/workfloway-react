@@ -8,7 +8,7 @@ import * as Yup from 'yup';
 import Input from '../../components/Input';
 import getValidationErrors from '../../utils/getValidationErrors';
 
-import { useAuth } from '../../context/AuthContext';
+import { useAuth } from '../../hooks/auth';
 
 import { Container, Content } from './styles';
 

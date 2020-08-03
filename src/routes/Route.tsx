@@ -7,7 +7,7 @@ import {
 
 import DefaultLayout from '../pages/_layouts/Default';
 
-import { useAuth } from '../context/AuthContext';
+import { useAuth } from '../hooks/auth';
 
 interface RouteProps extends RouterDOMRouteProps {
   isPrivate?: boolean;

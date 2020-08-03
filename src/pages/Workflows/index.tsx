@@ -4,8 +4,7 @@ import { toast } from 'react-toastify';
 
 import { FiSave, FiPlus, GrEdit } from 'react-icons/all';
 import produce from 'immer';
-import { useNavigation } from '../../context/NavigationContext';
-import { useWorkflow } from '../../context/WorkflowContext';
+import { useWorkflow } from '../../hooks/workflow';
 
 import WorkflowEditor from '../../components/WorkflowEditor';
 
@@ -18,27 +17,35 @@ interface SelectOptions {
 }
 
 const Workflows: React.FC = () => {
-  const { setPage } = useNavigation();
-  const { workflow, setWorkflow } = useWorkflow();
-  const [options, setOptions] = useState<SelectOptions[]>([]);
+  const {
+    workflow,
+    setWorkflowName,
+    setWorkflow,
+    clearWorkflow,
+  } = useWorkflow();
 
-  useEffect(() => setPage('workflows'), [setPage]);
+  const [workflows, setWorkflows] = useState<SelectOptions[]>([]);
 
-  const canSave = useMemo(
-    () => !!(workflow.edited && workflow.content.length),
-    [workflow],
-  );
-
-  useEffect(() => {
-    api.get('/workflows').then(response => {
+  const getWorkflows = useCallback((): void => {
+    api.get<{ id: string; name: string }[]>('/workflows').then(response => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const workflows = response.data.map((option: { id: any; name: any }) => ({
+      const parsedToOptionsWorkflows = response.data.map(option => ({
         value: option.id,
         label: option.name,
       }));
-      setOptions(workflows);
+      setWorkflows(parsedToOptionsWorkflows);
     });
   }, []);
+
+  useEffect(() => {
+    getWorkflows();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const canSave = useMemo(
+    () => !!(workflow.hasUnsavedChanges && workflow.content.length),
+    [workflow],
+  );
 
   const handleEditName = useCallback(() => {
     // eslint-disable-next-line no-alert
@@ -47,33 +54,28 @@ const Workflows: React.FC = () => {
       workflow.name || 'untitled',
     );
     if (newName) {
-      setWorkflow(
-        produce(workflow, draft => {
-          draft.name = newName;
-          draft.edited = true;
-        }),
-      );
+      setWorkflowName(newName);
 
-      const currentOptionIndex = options.findIndex(
+      const currentOptionIndex = workflows.findIndex(
         option => option.value === workflow.id,
       );
 
       if (currentOptionIndex > 0) {
-        setOptions(
-          produce(options, draft => {
+        setWorkflows(
+          produce(workflows, draft => {
             draft[currentOptionIndex].label = newName;
           }),
         );
       } else {
-        setOptions(
-          produce(options, draft => {
+        setWorkflows(
+          produce(workflows, draft => {
             draft.push({ value: workflow.id, label: newName });
           }),
         );
       }
+      return newName;
     }
-    return newName;
-  }, [options, setWorkflow, workflow]);
+  }, [workflow.name, workflow.id, setWorkflowName, workflows]);
 
   const handleOptionChange = useCallback(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -113,15 +115,15 @@ const Workflows: React.FC = () => {
   }, [handleEditName, setWorkflow, workflow]);
 
   const handleNew = useCallback(() => {
-    setWorkflow({ id: undefined, content: [], edited: false, name: undefined });
-  }, [setWorkflow]);
+    clearWorkflow();
+  }, [clearWorkflow]);
 
   return (
     <Container>
       <WorkflowSelector>
         <strong>Workflow editor</strong>
         <Select
-          options={options}
+          options={workflows}
           onChange={handleOptionChange}
           value={{ value: workflow.id, label: workflow.name || '+ New' }}
         />

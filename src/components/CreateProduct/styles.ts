@@ -2,11 +2,16 @@ import styled from 'styled-components';
 
 export const Container = styled.div`
   display: flex;
+  flex: 1;
   flex-direction: column;
+  overflow-y: auto;
+
+  margin: 10px;
 
   nav {
-    margin: 30px;
+    display: flex;
   }
+
   nav > button {
     background: none;
     border: 0;
@@ -31,58 +36,54 @@ export const Container = styled.div`
     flex-direction: column;
 
     margin: 15px 0;
-  }
 
-  table {
-    margin-top: 10px;
-  }
-
-  button#bt {
-    border-radius: 5px;
-    box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4);
-    border: none;
-    padding: 0 20px;
-
-    display: flex;
-    align-self: center;
-    place-content: center;
-    align-items: center;
-
-    &.new-line {
-      background: #dedede;
-      margin-top: 7px;
-      margin-bottom: 20px;
-      height: 28px;
+    strong {
+      font-size: 24px;
+      margin-bottom: 10px;
     }
 
-    &.create {
-      background: #006600;
-      color: #fff;
-      height: 36px;
-      margin-top: 20px;
-      /* width: ; */
+    small {
+      font-size: 18px;
+      color: #555;
+      font-weight: bold;
     }
-  }
 
-  strong {
-    font-size: 24px;
-  }
+    p {
+      font-size: 16px;
 
-  small {
-    font-size: 18px;
-    color: #555;
-    margin: 10px 0;
-    font-weight: bold;
-  }
+      display: flex;
+      flex-direction: row;
+    }
 
-  p {
-    font-size: 16px;
+    input.file {
+      margin-top: 15px;
+    }
 
-    display: flex;
-    flex-direction: row;
-  }
+    button {
+      border-radius: 5px;
+      box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4);
+      border: none;
+      padding: 0 20px;
 
-  input.file {
-    margin-top: 15px;
+      display: flex;
+      align-self: center;
+      place-content: center;
+      align-items: center;
+
+      &#new-line {
+        background: #dedede;
+        margin-top: 7px;
+        margin-bottom: 20px;
+        height: 28px;
+      }
+
+      &#create {
+        background: #006600;
+        color: #fff;
+        height: 36px;
+        margin-top: 20px;
+        /* width: ; */
+      }
+    }
   }
 `;

@@ -3,7 +3,7 @@ import { useDrag, DragSourceMonitor } from 'react-dnd';
 import { GrDrag } from 'react-icons/all';
 import { uuid } from 'uuidv4';
 
-import { useWorkflow } from '../../../context/WorkflowContext';
+import { useWorkflow } from '../../../hooks/workflow';
 
 import { Container } from './styles';
 
@@ -13,7 +13,7 @@ type ObservationTypeProps = {
 };
 
 const ObservationType: React.FC<ObservationTypeProps> = ({ id, name }) => {
-  const { pushItem } = useWorkflow();
+  const { pushWorkflowItem } = useWorkflow();
   const [{ isDragging }, drag] = useDrag({
     item: {
       typeId: id,
@@ -23,7 +23,7 @@ const ObservationType: React.FC<ObservationTypeProps> = ({ id, name }) => {
     end: (item, monitor: DragSourceMonitor) => {
       const dropResult = monitor.getDropResult();
       if (item && dropResult) {
-        pushItem({ ...item, id: uuid() }, dropResult);
+        pushWorkflowItem({ ...item, id: uuid() }, dropResult);
         // alert(`You dropped ${item.name} into ${dropResult.id}!`);
       }
     },

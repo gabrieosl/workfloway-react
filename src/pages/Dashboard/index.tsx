@@ -1,38 +1,32 @@
 import React, { useEffect, useState, useCallback, useMemo } from 'react';
-import { MdCheck, MdClose, MdAdd, FiFilter } from 'react-icons/all';
+import { MdCheck, MdAdd } from 'react-icons/all';
 import produce from 'immer';
-import Select from 'react-select';
 
-import { useNavigation } from '../../context/NavigationContext';
-import { useSelection } from '../../context/SelectionContext';
-import { useTypes } from '../../context/TypesContext';
+import { useSelection } from '../../hooks/selection';
 import api from '../../services/api';
 
+import FilterCreator from '../../components/FilterCreator';
 import List from '../../components/List';
-import CreateObservation from '../../components/CreateObservation';
+import Popup from '../../components/Popup';
 import CreateProduct from '../../components/CreateProduct';
 
-import { Container, SelectionPanel, ActiveFilters } from './styles';
-import CreateNewPopup from '../../components/CreateNewPopup';
+import { Container, SelectionPanel } from './styles';
 
-interface SelectOptions {
-  value?: {
-    id: string;
-    needsMoreInput: boolean;
-    type: string;
+interface ObservationData {
+  type_id: string;
+  created_at: Date;
+  comment: string;
+  value: string;
+  user: {
+    name: string;
   };
-  label: string;
 }
-interface ItemData {
+
+interface SubjectData {
   id: string;
   name: string;
-  lastObservation?: {
-    type_id: string;
-    created_at: Date;
-    user: {
-      name: string;
-    };
-  };
+  observations: ObservationData[];
+  lastObservation?: ObservationData;
   lastSubmission?: {
     repetition: number;
   };
@@ -42,238 +36,99 @@ interface ItemData {
   }[];
 }
 
-interface FilterData {
-  type: string;
-  id: string;
-  value: string;
-  name?: string;
-}
-
-interface GroupedFilters {
-  [key: string]: string[];
-}
-interface ParsedFilters {
-  [key: string]: string;
-}
-
 const Dashboard: React.FC = () => {
-  const { tags, types, getTagName, getTypeName } = useTypes();
-  const { setPage } = useNavigation();
   const { isSelected, addToSelection, removeFromSelection } = useSelection();
+  const [subjects, setSubjects] = useState<SubjectData[]>([]);
+  const [parsedFilters, setParsedFilters] = useState({});
+  const [subjectsPage, setSubjectsPage] = useState(1);
+  const [subjectsPerPage] = useState(15);
+  const [showCreateProductPopup, setShowCreateProductPopup] = useState(false);
 
-  const [currentPage, setCurrentpage] = useState(1);
-  const [size] = useState(15);
-  const [items, setItems] = useState<ItemData[]>([]);
-  const [filterOption, setFilterOption] = useState<SelectOptions>({
-    label: 'Select a filter',
-  } as SelectOptions);
-  const [filterInputValue, setFilterInputValue] = useState('');
-  const [filterInputVisibility, setFilterInputVisibility] = useState(false);
-  const [filters, setFilters] = useState<FilterData[]>([]);
-
-  const isAllMarked = useMemo(() => !items.find(item => !isSelected(item.id)), [
-    isSelected,
-    items,
-  ]);
-
-  const handleToggleMarkAll = useCallback(() => {
-    if (!isAllMarked) {
-      addToSelection(items);
-    } else {
-      removeFromSelection(items);
-    }
-  }, [addToSelection, isAllMarked, items, removeFromSelection]);
-
-  useEffect(() => setPage('dashboard'), [setPage]);
-  const parsedFilters = useMemo(
-    () =>
-      filters.map(filter => ({
-        ...filter,
-        name: getTagName(filter.id) || getTypeName(filter.id),
-      })),
-    [filters, getTagName, getTypeName],
-  );
-  const paramsGroupedFilters = useMemo(() => {
-    const groupedFilters = filters.reduce((prev, curr) => {
-      if (!prev[curr.type]) {
-        prev[curr.type] = [];
-      }
-
-      prev[curr.type].push(
-        curr.value.length ? `${curr.id}:${curr.value}` : curr.id,
-      );
-
-      return prev;
-    }, {} as GroupedFilters);
-
-    const paramsParsedFilters = Object.entries(groupedFilters).reduce(
-      (prev, curr) => {
-        prev[curr[0]] = curr[1].join(',');
-        return prev;
-      },
-      {} as ParsedFilters,
-    );
-
-    return paramsParsedFilters;
-  }, [filters]);
-
-  const getData = useCallback(() => {
+  const refreshData = useCallback(() => {
     api
       .get(`/subjects?`, {
         params: {
-          ...paramsGroupedFilters,
-          page: currentPage,
-          size,
+          ...parsedFilters,
+          page: subjectsPage,
+          size: subjectsPerPage,
         },
       })
-      .then(response => {
-        setItems(response.data);
-      });
-  }, [currentPage, paramsGroupedFilters, size]);
+      .then(response => setSubjects(response.data));
+  }, [parsedFilters, subjectsPage, subjectsPerPage]);
 
-  const filterOptions = useMemo(() => {
-    const options: SelectOptions[] = [];
-    tags.forEach(tag => {
-      options.push({
-        value: { id: tag.id, needsMoreInput: true, type: 'hasTag' },
-        label: `Tag: ${tag.name}`,
-      });
-    });
-    types.forEach(type => {
-      options.push({
-        value: {
-          id: type.id,
-          needsMoreInput: false,
-          type: 'lastObservationType',
+  const appendMoreData = useCallback(() => {
+    console.log('called');
+    api
+      .get(`/subjects?`, {
+        params: {
+          ...parsedFilters,
+          page: subjectsPage,
+          size: subjectsPerPage,
         },
-        label: `Status: ${type.name}`,
-      });
-    });
-
-    return options;
-  }, [tags, types]);
-
-  const handleOptionChange = useCallback(
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (newOption: any) => {
-      console.log(newOption);
-      setFilterOption(newOption);
-      setFilterInputValue('');
-      setFilterInputVisibility(newOption.value.needsMoreInput);
-    },
-    [],
-  );
-
-  const handleAddFilter = useCallback(() => {
-    setFilters(
-      produce(filters, draft => {
-        if (!filterOption.value) return draft;
-        draft.push({
-          type: filterOption.value.type,
-          id: filterOption.value.id,
-          value: filterInputValue,
-        });
-        return draft;
-      }),
-    );
-  }, [filterInputValue, filterOption.value, filters]);
-
-  const handleRemoveFilter = useCallback(
-    index => {
-      setFilters(
-        produce(filters, draft => {
-          draft.splice(index, 1);
-          return draft;
-        }),
+      })
+      .then(response =>
+        setSubjects(prev =>
+          produce(prev, draft => {
+            draft = draft.concat(response.data);
+            return draft;
+          }),
+        ),
       );
-    },
-    [filters],
+    setSubjectsPage(prev => prev + 1);
+  }, [parsedFilters, subjectsPage, subjectsPerPage]);
+
+  const areAllSubjectsMarked = useMemo(
+    () => !subjects.find(item => !isSelected(item.id)),
+    [isSelected, subjects],
   );
 
-  const handleLoadMoreItems = useCallback(() => {
-    if (currentPage > 0) {
-      api
-        .get(`/subjects?page=${currentPage + 1}&size=${size}`)
-        .then(response => {
-          if (response.data.length > 0) {
-            setItems(
-              produce(items, draft => {
-                draft.push(...response.data);
-              }),
-            );
-          }
-          if (response.data.length < size) {
-            setCurrentpage(-1);
-          }
-        });
-      setCurrentpage(currentPage + 1);
+  const handleToggleMarkAll = useCallback(() => {
+    if (!areAllSubjectsMarked) {
+      addToSelection(subjects);
+    } else {
+      removeFromSelection(subjects);
     }
-  }, [currentPage, items, setItems, size]);
+  }, [addToSelection, areAllSubjectsMarked, subjects, removeFromSelection]);
 
   useEffect(() => {
-    getData();
+    refreshData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [paramsGroupedFilters]);
+  }, [parsedFilters]);
 
   return (
-    <>
-      <Container>
-        <SelectionPanel isAllMarked={isAllMarked}>
-          <strong>List of Products</strong>
-          <section>
-            <Select
-              options={filterOptions}
-              onChange={handleOptionChange}
-              value={filterOption}
+    <Container>
+      <div className="title-holder">
+        <strong className="title-text">List of Products</strong>
+        <button
+          type="button"
+          className="create-new"
+          onClick={() => setShowCreateProductPopup(true)}
+        >
+          <MdAdd />
+          <span>New Product</span>
+        </button>
+        {showCreateProductPopup && (
+          <Popup onClose={setShowCreateProductPopup}>
+            <CreateProduct
+              onClose={setShowCreateProductPopup}
+              refreshData={refreshData}
             />
-            {filterInputVisibility && (
-              <input
-                type="text"
-                value={filterInputValue}
-                onChange={e => setFilterInputValue(e.target.value)}
-              />
-            )}
-            <button type="button" onClick={handleAddFilter}>
-              <MdAdd />
-              <FiFilter />
-            </button>
-          </section>
-          <CreateNewPopup text="New Product">
-            <CreateProduct />
-          </CreateNewPopup>
-          <button
-            type="button"
-            className="mark-all"
-            onClick={handleToggleMarkAll}
-          >
-            <MdCheck size={25} />
-            <MdCheck size={25} />
-          </button>
-        </SelectionPanel>
-        {!!Object.keys(filters).length && (
-          <ActiveFilters>
-            <span>Active filters:</span>
-            {parsedFilters.map((filter, index) => (
-              // eslint-disable-next-line react/no-array-index-key
-              <div key={index}>
-                <span>{`${filter.type} ${filter.name} ${filter.value}`}</span>
-                <button type="button" onClick={() => handleRemoveFilter(index)}>
-                  <MdClose />
-                </button>
-              </div>
-            ))}
-          </ActiveFilters>
+          </Popup>
         )}
-        <List items={items}>
-          {currentPage > 0 && (
-            <button type="button" onClick={handleLoadMoreItems}>
-              <MdAdd size={30} />
-            </button>
-          )}
-        </List>
-      </Container>
-      <CreateObservation initialTypeSelectedId="b1dcfa79-d1ff-4922-b482-ad5629c970a3" />
-    </>
+      </div>
+      <SelectionPanel areAllSubjectsMarked={areAllSubjectsMarked}>
+        <FilterCreator setParsedFilters={setParsedFilters} />
+        <button
+          type="button"
+          className="select-all"
+          onClick={handleToggleMarkAll}
+        >
+          <MdCheck size={25} />
+          <MdCheck size={25} />
+        </button>
+      </SelectionPanel>
+      <List items={subjects} loadMoreItems={appendMoreData} />
+    </Container>
   );
 };
 

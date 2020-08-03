@@ -1,4 +1,5 @@
 import React, { useMemo, useState, useCallback, useEffect } from 'react';
+import { useRouteMatch } from 'react-router-dom';
 import Select from 'react-select';
 import { toast } from 'react-toastify';
 
@@ -6,10 +7,10 @@ import { MdAdd, FiSend, MdCancel } from 'react-icons/all';
 
 import api from '../../services/api';
 
-import { useSelection } from '../../context/SelectionContext';
-import { useTypes } from '../../context/TypesContext';
+import { useSelection } from '../../hooks/selection';
+import { useBase } from '../../hooks/base';
 
-import { FloatingButton, FloatingCard } from './styles';
+import { Container, FloatingCard } from './styles';
 
 interface SelectOptions {
   value?: string;
@@ -23,8 +24,9 @@ interface CreateObservationProps {
 const CreateObservation: React.FC<CreateObservationProps> = ({
   initialTypeSelectedId = '',
 }) => {
-  const { selection } = useSelection();
-  const { types, getTypeName } = useTypes();
+  const { selectedSubjectIds } = useSelection();
+  const { types, getNameById } = useBase();
+  const { path } = useRouteMatch();
 
   const [showCard, setShowCard] = useState(false);
   const [selectedType, setSelectedType] = useState<SelectOptions>(
@@ -33,13 +35,15 @@ const CreateObservation: React.FC<CreateObservationProps> = ({
   const [value, setValue] = useState('');
   const [comment, setComment] = useState('');
 
+  const showSelfWhenFloating = useMemo(() => path === '/dashboard', [path]);
+
   const options = useMemo<SelectOptions[]>(() => {
-    return types.reduce((all, current) => {
-      all.push({ value: current.id, label: current.name });
-      return all;
-    }, [] as SelectOptions[]);
+    return types.map(type => {
+      return { value: type.id, label: type.name };
+    });
   }, [types]);
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleOptionChange = useCallback((newOption: any) => {
     setSelectedType(newOption);
   }, []);
@@ -47,6 +51,7 @@ const CreateObservation: React.FC<CreateObservationProps> = ({
   const handleObsValueChange = useCallback(e => {
     setValue(e.target.value);
   }, []);
+
   const handleObsCommentChange = useCallback(e => {
     setComment(e.target.value);
   }, []);
@@ -55,21 +60,21 @@ const CreateObservation: React.FC<CreateObservationProps> = ({
     setShowCard(!showCard);
   }, [showCard]);
 
-  const isAnySelected = useMemo(() => !!selection.length, [selection]);
+  const isAnySelected = useMemo(() => !!selectedSubjectIds.length, [
+    selectedSubjectIds,
+  ]);
+
+  const numberOfSelected = useMemo(() => selectedSubjectIds.length, [
+    selectedSubjectIds,
+  ]);
 
   const handleSubmit = useCallback(async () => {
-    const listOfTargets = selection.reduce((all, currentItem) => {
-      all.push(currentItem.id);
-      return all;
-    }, [] as string[]);
-
     const params = {
       value,
       comment,
       type_id: selectedType.value,
-      subject_ids: listOfTargets,
+      subject_ids: selectedSubjectIds,
     };
-    console.log(params);
 
     const response = await api.post('/observations', params);
     if (response.status === 201) {
@@ -78,30 +83,29 @@ const CreateObservation: React.FC<CreateObservationProps> = ({
     } else {
       toast.error('Error!');
     }
-  }, [comment, selectedType.value, selection, value]);
-
-  const numberOfSelected = useMemo(() => selection.length, [selection]);
+  }, [comment, selectedSubjectIds, selectedType.value, value]);
 
   useEffect(() => {
     setSelectedType({
       value: initialTypeSelectedId || '',
       // TODO improve next line
-      label: getTypeName(initialTypeSelectedId) || 'Select type',
+      label: getNameById(initialTypeSelectedId, 'types') || 'Select type',
     });
-  }, [getTypeName, initialTypeSelectedId]);
+  }, [getNameById, initialTypeSelectedId]);
 
   return (
     <>
-      <FloatingButton
-        onClick={showCard ? handleSubmit : toogleShowCard}
+      <Container
+        onClick={toogleShowCard}
         showCard={showCard}
         isAnySelected={isAnySelected}
+        showSelfWhenFloating={showSelfWhenFloating}
       >
         {showCard ? <FiSend /> : <MdAdd />}
         {!showCard && numberOfSelected > 0 && <span>{numberOfSelected}</span>}
-      </FloatingButton>
+      </Container>
       {showCard && (
-        <FloatingCard>
+        <FloatingCard showCard={showCard}>
           <aside>
             <h2>Add Observation</h2>
             <button type="button" onClick={toogleShowCard}>
@@ -128,11 +132,14 @@ const CreateObservation: React.FC<CreateObservationProps> = ({
           <section />
           <hr />
           <h3>{`To ${numberOfSelected} products`}</h3>
-          <div>
-            {selection.map(item => (
-              <p>{item.name}</p>
-            ))}
-          </div>
+          <button
+            type="button"
+            className="submit-observation"
+            onClick={handleSubmit}
+          >
+            <MdAdd />
+            Add
+          </button>
         </FloatingCard>
       )}
     </>

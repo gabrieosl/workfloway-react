@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
 
 export const Container = styled.div`
   display: flex;
@@ -13,47 +12,73 @@ export const Container = styled.div`
   background: #067bc2;
   padding-top: 60px;
 
+  @media all and (max-width: 768px) {
+    flex-direction: row;
+    height: 60px;
+    width: 100vw;
+    padding: 0;
+    background: #fff;
+    border-top: 1px solid #ddd;
+  }
+
+  nav {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+
+    @media all and (max-width: 768px) {
+      justify-content: space-around;
+      flex-direction: row;
+      height: 100%;
+    }
+  }
+
   a {
     display: flex;
     justify-content: center;
     align-items: center;
-
-    width: 50px;
-    height: 50px;
-    margin-bottom: 10px;
     background: none;
-    border-radius: 4px;
-    color: #fff;
-    transition: background 0.2s;
+    color: #000;
+    width: 100%;
+    height: 100%;
 
     svg {
       height: 25px;
       width: 25px;
+
+      transition: all 0.2s;
     }
 
-    &.active {
-      box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
-    }
+    @media all and (max-width: 768px) {
+      opacity: 0.7;
 
-    &.dashboard {
       &.active {
-        background: #03126c;
+        opacity: 1;
+        svg {
+          height: 30px;
+          width: 30px;
+        }
       }
-      &:hover {
-        background: #03126c66;
+
+      &#workflows {
+        display: none;
+      }
+
+      &#selection span {
+        display: none;
       }
     }
-    &.selection {
+
+    @media all and (min-width: 769px) {
       position: relative;
+      width: 50px;
+      height: 50px;
+      margin-bottom: 10px;
+      border-radius: 4px;
+      color: #fff;
+      transition: background 0.2s;
 
-      &.active {
-        background: #fac748;
-      }
-      &:hover {
-        background: #fac74866;
-      }
-
-      span {
+      &#selection span {
         position: absolute;
 
         display: flex;
@@ -70,40 +95,54 @@ export const Container = styled.div`
         transform: translateX(50%) translateY(-30%);
         font-weight: bold;
       }
-    }
-    &.workflows {
-      &.active {
+
+      &.active#dashboard {
+        background: #03126c;
+      }
+
+      &#dashboard.active {
+        background: #03126c;
+      }
+
+      &#selection.active {
+        background: #fac748;
+      }
+
+      &#workflows.active {
         background: #006600;
       }
-      &:hover {
-        background: #00660066;
-      }
-    }
-    &.activities {
-      &.active {
+
+      & #activities.active {
         background: #dedede;
         color: #777;
       }
-      &:hover {
-        background: #dedede66;
-      }
-    }
-    &.settings {
-      &.active {
+
+      &#settings.active {
         background: #dedede;
         color: #777;
       }
+
+      &.active {
+        box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+      }
+
       &:hover {
-        background: #dedede66;
+        box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+      }
+      &:active {
+        box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
+      }
+
+      &:last-child {
+        justify-self: flex-end;
       }
     }
   }
-`;
 
-export const Menu = styled.nav`
-  display: flex;
-  flex-direction: column;
-`;
-export const Settings = styled(Link)`
-  margin-bottom: 30px;
+  div.separator {
+    flex: 1;
+    @media all and (max-width: 768px) {
+      display: none;
+    }
+  }
 `;

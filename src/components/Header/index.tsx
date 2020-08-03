@@ -1,18 +1,27 @@
-import React from 'react';
+import React, { useState } from 'react';
 
-import { FaUser, FiPower } from 'react-icons/all';
+import { FaUser, FiPower, MdClose } from 'react-icons/all';
 import { Container } from './styles';
-import { useAuth } from '../../context/AuthContext';
+import { useAuth } from '../../hooks/auth';
 
 const Header: React.FC = () => {
   const { signOut, user } = useAuth();
+  const [showProfile, setShowProfile] = useState(false);
+
   return (
-    <Container>
+    <Container showProfile={showProfile}>
       <strong>Workfloway</strong>
       <aside>
-        <FaUser />
+        <button
+          type="button"
+          id="profile"
+          onClick={() => setShowProfile(prev => !prev)}
+        >
+          <FaUser />
+          <MdClose />
+        </button>
         <strong>{user.name}</strong>
-        <button type="button" onClick={signOut}>
+        <button type="button" id="logout" onClick={signOut}>
           <FiPower />
         </button>
       </aside>

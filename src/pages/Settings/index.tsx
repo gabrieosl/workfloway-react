@@ -1,6 +1,4 @@
-import React, { useState, useMemo, useEffect } from 'react';
-
-import { useNavigation } from '../../context/NavigationContext';
+import React, { useState, useMemo } from 'react';
 
 import Observations from './Observations';
 import Tags from './Tags';
@@ -17,15 +15,10 @@ const SubmenuComponents: SubmenuComponentsInterface = {
 
 const Settings: React.FC = () => {
   const [submenu, setSubmenu] = useState('tags');
-  const { setPage } = useNavigation();
 
   const Component = useMemo(() => {
     return SubmenuComponents[submenu];
   }, [submenu]);
-
-  useEffect(() => {
-    setPage('settings', submenu);
-  }, [setPage, submenu]);
 
   return (
     <Container>
