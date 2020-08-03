@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: process.env.REACT_APP_API_BACKEND_URL,
+  baseURL: "https://api.workfloway.com",
 });
 
 api.interceptors.request.use(
