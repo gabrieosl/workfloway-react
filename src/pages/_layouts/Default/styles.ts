@@ -21,6 +21,11 @@ export const Main = styled.div`
   margin: 0;
 `;
 
+export const PageTitle = styled.h1`
+  font-weight: normal;
+  margin: 20px;
+`;
+
 export const PageComponent = styled.div`
   flex: 1;
   display: flex;
@@ -29,16 +34,16 @@ export const PageComponent = styled.div`
   overflow: hidden;
 
   @media all and (min-width: 500px) and (max-width: 768px) {
-    padding: 20px;
+    /* padding: 20px; */
   }
 
   @media all and (min-width: 769px) and (max-width: 992px) {
-    padding: 40px;
+    /* padding: 40px; */
   }
   @media all and (min-width: 993px) and (max-width: 1200px) {
-    padding: 40px 60px;
+    /* padding: 40px 60px; */
   }
   @media all and (min-width: 1201px) {
-    padding: 40px 120px;
+    /* padding: 40px 120px; */
   }
 `;

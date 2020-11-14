@@ -29,7 +29,7 @@ const CustomRoute: React.FC<RouteProps> = ({
             <Component />
           </DefaultLayout>
         ) : (
-          <Redirect to={{ pathname: isPrivate ? '/signin' : '/dashboard' }} />
+          <Redirect to={{ pathname: isPrivate ? '/signin' : '/products' }} />
         );
       }}
       {...rest}

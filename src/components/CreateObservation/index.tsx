@@ -35,7 +35,7 @@ const CreateObservation: React.FC<CreateObservationProps> = ({
   const [value, setValue] = useState('');
   const [comment, setComment] = useState('');
 
-  const showSelfWhenFloating = useMemo(() => path === '/dashboard', [path]);
+  const showSelfWhenFloating = useMemo(() => path === '/products', [path]);
 
   const options = useMemo<SelectOptions[]>(() => {
     return types.map(type => {

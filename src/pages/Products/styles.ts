@@ -10,18 +10,6 @@ export const Container = styled.div`
   background: none;
   padding: 0;
 
-  div.title-holder {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-
-  strong.title-text {
-    flex: 1;
-    margin: 10px;
-    font-size: 18px;
-  }
-
   button {
     display: flex;
     align-items: center;
@@ -30,9 +18,9 @@ export const Container = styled.div`
   }
 
   button.create-new {
+    align-self: flex-end;
     font-weight: bold;
     padding: 0 10px;
-    height: 100%;
     width: 50px;
     background: none;
 
@@ -47,14 +35,11 @@ export const Container = styled.div`
   }
 
   @media all and (min-width: 501px) {
-    strong.page-title {
-      font-size: 24px;
-    }
     button.create-new {
       background: #006600;
       color: #fff;
       height: 36px;
-      width: unset;
+      width: 150px;
       border-radius: 5px;
       span {
         display: block;

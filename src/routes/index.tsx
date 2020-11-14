@@ -5,7 +5,7 @@ import Route from './Route';
 
 import SignIn from '../pages/SignIn';
 
-import Dashboard from '../pages/Dashboard';
+import Products from '../pages/Products';
 import Selection from '../pages/Selection';
 import Workflows from '../pages/Workflows';
 import Activities from '../pages/Activities';
@@ -14,7 +14,7 @@ import Settings from '../pages/Settings';
 const routes: React.FC = () => {
   return (
     <Switch>
-      <Route path="/dashboard" component={Dashboard} isPrivate />
+      <Route path="/products" component={Products} isPrivate />
       <Route path="/settings" component={Settings} isPrivate />
       <Route path="/workflows" component={Workflows} isPrivate />
       <ReactDOMRoute path="/signin" exact component={SignIn} />
@@ -23,7 +23,7 @@ const routes: React.FC = () => {
       <ReactDOMRoute
         path="/"
         exact
-        render={() => <Redirect to={{ pathname: '/dashboard' }} />}
+        render={() => <Redirect to={{ pathname: '/products' }} />}
       />
       <ReactDOMRoute path="/" component={() => <h1>404</h1>} />
     </Switch>

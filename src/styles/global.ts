@@ -14,6 +14,10 @@ export default createGlobalStyle`
     outline: 0;
   }
 
+  html * {
+    font-family: 'Inconsolata', sans-serif;
+  }
+
   html, body, #root {
     height: 100%;
   }

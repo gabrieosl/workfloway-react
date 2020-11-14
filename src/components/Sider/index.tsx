@@ -21,9 +21,9 @@ const Sider: React.FC = () => {
     <Container>
       <nav>
         <Link
-          to="/dashboard"
+          to="/products"
           id="dashboard"
-          className={path.startsWith('/dashboard') ? ' active' : ''}
+          className={path.startsWith('/products') ? ' active' : ''}
         >
           <FiGrid />
         </Link>

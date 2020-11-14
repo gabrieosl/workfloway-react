@@ -62,19 +62,19 @@ const Dashboard: React.FC = () => {
       .get(`/subjects?`, {
         params: {
           ...parsedFilters,
-          page: subjectsPage,
+          page: subjectsPage + 1,
           size: subjectsPerPage,
         },
       })
-      .then(response =>
+      .then(response => {
         setSubjects(prev =>
           produce(prev, draft => {
             draft = draft.concat(response.data);
             return draft;
           }),
-        ),
-      );
-    setSubjectsPage(prev => prev + 1);
+        );
+        setSubjectsPage(subjectsPage + 1);
+      });
   }, [parsedFilters, subjectsPage, subjectsPerPage]);
 
   const areAllSubjectsMarked = useMemo(
@@ -97,25 +97,14 @@ const Dashboard: React.FC = () => {
 
   return (
     <Container>
-      <div className="title-holder">
-        <strong className="title-text">List of Products</strong>
-        <button
-          type="button"
-          className="create-new"
-          onClick={() => setShowCreateProductPopup(true)}
-        >
-          <MdAdd />
-          <span>New Product</span>
-        </button>
-        {showCreateProductPopup && (
-          <Popup onClose={setShowCreateProductPopup}>
-            <CreateProduct
-              onClose={setShowCreateProductPopup}
-              refreshData={refreshData}
-            />
-          </Popup>
-        )}
-      </div>
+      <button
+        type="button"
+        className="create-new"
+        onClick={() => setShowCreateProductPopup(true)}
+      >
+        <MdAdd />
+        <span>New Product</span>
+      </button>
       <SelectionPanel areAllSubjectsMarked={areAllSubjectsMarked}>
         <FilterCreator setParsedFilters={setParsedFilters} />
         <button
@@ -128,6 +117,14 @@ const Dashboard: React.FC = () => {
         </button>
       </SelectionPanel>
       <List items={subjects} loadMoreItems={appendMoreData} />
+      {showCreateProductPopup && (
+        <Popup onClose={setShowCreateProductPopup}>
+          <CreateProduct
+            onClose={setShowCreateProductPopup}
+            refreshData={refreshData}
+          />
+        </Popup>
+      )}
     </Container>
   );
 };
